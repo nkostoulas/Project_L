@@ -63,7 +63,7 @@ ROOT_URLCONF = 'projectl.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(PACKAGE_ROOT, "templates"),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

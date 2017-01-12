@@ -1,0 +1,27 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+  <link rel="stylesheet" href="{% static 'css/projectl.css' %}" type="text/css">
+  <link rel="stylesheet" href="{% static 'font-awesome-4.7.0/css/font-awesome.min.css' %}" type="text/css">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lobster&amp;subset=latin,latin-ext" type="text/css">
+<title>Project L</title>
+</head>
+<body>
+
+  {% block content %}
+  {% endblock %}
+
+  <footer class="footer">
+    <div class="container">
+      <span class="text-muted">&copy Project L</span>
+    </div>
+  </footer>
+
+</body>
+
+<script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+</html>

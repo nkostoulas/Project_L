@@ -5,3 +5,7 @@ from django.shortcuts import render
 def user_list(request):
 
     return render(request, 'lists/user_list.html')
+
+def user_signup(request):
+
+    return render(request, 'lists/user_signup.html')
