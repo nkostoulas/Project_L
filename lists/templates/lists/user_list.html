@@ -9,12 +9,27 @@
     <a class="navbar-brand" href="/">Project L</a>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="nav navbar-nav mr-auto">
+      {% if user.is_authenticated %}
+        <li class="nav-item active">
+          <a class="nav-link" href="/">{{ user.username}} <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/settings">Settings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/password">Change Password</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">logout</a>
+        </li>
+      {% else %}  
         <li class="nav-item active">
           <a class="nav-link" href="/signup">Sign Up <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Login</a>
+          <a class="nav-link" href="/login">Login</a>
         </li>
+      {% endif %}
       </ul>
     </div>
   </nav>

@@ -124,9 +124,29 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_FACEBOOK_KEY = '1306418946088606'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '80f844ae2094f65dcb2a9af46e23c903'  # App Secret
 
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email',] ##for user_location and dob Facebook has to review how app is used
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id,name,first_name,last_name,link,email,gender,age_range,locale', 
+}
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details',
+    'lists.pipeline.user_details',
+)
+
+#AUTH_PROFILE_MODULE = 'lists.UserProfile'
+
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'user_list'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
