@@ -4,11 +4,18 @@ from django.contrib.auth import update_session_auth_hash, login, authenticate
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from social_django.models import UserSocialAuth
+from .models import Choice, UserProfile
+
 # Create your views here.
 
+@login_required
 def user_list(request):
 
-    return render(request, 'lists/user_list.html')
+    current_user_profile = UserProfile.objects.filter(user=request.user)
+
+    user_choices = Choice.objects.filter(user=current_user_profile)
+
+    return render(request, 'lists/user_list.html', {'user_choices': user_choices})
 
 def signup(request):
     if request.method == 'POST':
@@ -60,4 +67,3 @@ def password(request):
     else:
         form = PasswordForm(request.user)
     return render(request, 'core/password.html', {'form': form})
-

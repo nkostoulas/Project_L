@@ -22,7 +22,7 @@
         <li class="nav-item">
           <a class="nav-link" href="/logout">logout</a>
         </li>
-      {% else %}  
+      {% else %}
         <li class="nav-item active">
           <a class="nav-link" href="/signup">Sign Up <span class="sr-only">(current)</span></a>
         </li>
@@ -51,6 +51,12 @@
     </div>
 
     <div style="height:20px"></div>
+
+    {% for choice in user_choices %}
+
+      {{ choice.choice.name }}
+
+    {% endfor %}
 
     <div class="row">
       <div class="col-md-4">
