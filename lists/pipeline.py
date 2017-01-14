@@ -7,11 +7,7 @@ def user_details(backend, details, response, user=None, *args, **kwargs):
     if user:
         if kwargs['is_new']:
             attrs = {'user': user}
-            # I am using also Twitter backend, so I am checking if It's FB
-            # or Twitter. Might be a better way of doing this
             if backend.name == 'facebook':
-                # We should check values before this, but for the example
-                # is fine
                 fb_data = {
                     'gender': response.get('gender'),
                     'locale': response.get('locale'),

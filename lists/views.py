@@ -1,19 +1,39 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm, UserCreationForm
+from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash, login, authenticate
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from social_django.models import UserSocialAuth
 from .models import Choice, UserProfile
-
+from .forms import EmailForm
 # Create your views here.
 
+def home(request):
+    return render(request, 'home.html')
+    
 @login_required
 def user_list(request):
 
+    if request.user.email=="":
+        return redirect('email')
+    
     user_choices = Choice.objects.filter(user=request.user.profile)
     
     return render(request, 'lists/user_list.html', {'user_choices': user_choices})
+
+@login_required
+def email(request):
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            user.email = form.cleaned_data['email']
+            user.save()
+            return redirect('user_list')
+    else:
+        form = EmailForm()
+    return render(request, 'registration/email.html', {'form': form})
 
 def signup(request):
     if request.method == 'POST':
