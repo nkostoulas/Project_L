@@ -11,10 +11,8 @@ from .models import Choice, UserProfile
 @login_required
 def user_list(request):
 
-    current_user_profile = UserProfile.objects.filter(user=request.user)
-
-    user_choices = Choice.objects.filter(user=current_user_profile)
-
+    user_choices = Choice.objects.filter(user=request.user.profile)
+    
     return render(request, 'lists/user_list.html', {'user_choices': user_choices})
 
 def signup(request):

@@ -6,11 +6,11 @@ from . import views
 
 urlpatterns = [
 	url(r'^login/$', auth_views.login, {'template_name': 'registration/login.html'}, name='login'),
-	url(r'^logout/$', auth_views.logout, {'template_name': 'lists/user_list.html'}, name='logout'),
+	url(r'^logout/$', auth_views.logout, {'template_name': 'lists/user_list.html'}, name='logout'),		#change to home
 	url(r'^signup/$', views.signup, name='signup'),
 	url(r'^settings/$', views.settings, name='settings'),
     url(r'^password/$', views.password, name='password'),
 	url(r'^oauth/', include('social_django.urls', namespace='social')),
 	
-    url(r'^$', views.user_list, name='user_list'),
+    url(r'^$', views.user_list, name='user_list'),	#change to home
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
