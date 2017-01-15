@@ -5,13 +5,40 @@ from django.contrib.auth import update_session_auth_hash, login, authenticate
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from social_django.models import UserSocialAuth
-from .models import Choice, UserProfile
-from .forms import EmailForm
+from .models import Choice, UserProfile, Category
+from .forms import EmailForm, ListForm, CategoryForm
 # Create your views here.
 
 def home(request):
     return render(request, 'home.html')
-    
+
+@login_required
+def choose_category(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            category = form.cleaned_data['category']
+            request.session['category'] = category.name
+            return redirect('submit_lists')
+    else:
+        form = CategoryForm()
+    return render(request, 'core/choose_category.html', {'form': form})
+
+@login_required
+def submit_lists(request):
+    cat_name = request.session.get('category')
+    category = Category.objects.filter(name = cat_name)
+    if request.method == 'POST':
+        form = ListForm(request.POST, category=category)
+        if form.is_valid():
+            choice = form.cleaned_data['choice']
+            user = request.user.profile
+            Choice.objects.create(choice=choice, user=user)
+            return redirect('user_list')
+    else:
+        form = ListForm(category=category)
+    return render(request, 'core/submit_lists.html', {'form': form, 'category': cat_name})
+
 @login_required
 def user_list(request):
 
