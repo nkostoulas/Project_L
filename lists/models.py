@@ -31,8 +31,15 @@ class UserProfile(models.Model):
 
 class Choice(models.Model):
 
-    choice = models.ForeignKey(Object, on_delete=models.CASCADE)
+    name = models.ForeignKey(Object, on_delete=models.CASCADE)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    #category = models.CharField(max_length=200)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    
+    @classmethod
+    def create(cls, name, user):
+        choice = cls(name=name, user=user, category=name.category)
+        return choice
 
     def __str__(self):
-        return "%s, %s, %s" % (self.user, self.choice, self.choice.category)
+        return "%s, %s, %s" % (self.user, self.name, self.name.category)
