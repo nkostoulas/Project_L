@@ -5,8 +5,8 @@ from django.contrib.auth import update_session_auth_hash, login, authenticate
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from social_django.models import UserSocialAuth
-from .models import Choice, UserProfile, Category
-from .forms import EmailForm, ChoiceForm
+from .models import Choice, UserProfile, Category, Object
+from .forms import EmailForm, ChoicesForm, CategoryForm
 # Create your views here.
 
 def home(request):
@@ -14,47 +14,58 @@ def home(request):
 
 @login_required
 def submit_choice(request):
-    if request.method == 'POST':
-        form = ChoiceForm(request.POST)
-        if form.is_valid():
-            choice = form.cleaned_data['choice']
-            user = request.user.profile
-            choice_object = Choice.create(name=choice, user=user)
-            choice_object.save()
-            return redirect('user_list')
-    else:
-        form = ChoiceForm()
-    return render(request, 'core/choose_category.html', {'form': ChoiceForm})
 
-'''
-@login_required
-def choose_category(request):    
-    if request.method == 'POST':
-        form = CategoryForm(request.POST)
-        if form.is_valid():
-            category = form.cleaned_data['category']
-            request.session['category'] = category.name
-            return redirect('submit_lists')
-    else:
-        form = CategoryForm()
-    return render(request, 'core/choose_category.html', {'form': form})
-    
+    user = request.user.profile
 
-@login_required
-def submit_lists(request):
-    cat_name = request.session.get('category')
-    category = Category.objects.filter(name = cat_name)
+    if 'category' not in request.session:
+        request.session['category'] = 'Restaurant'    
+
     if request.method == 'POST':
-        form = ListForm(request.POST, category=category)
-        if form.is_valid():
-            choice = form.cleaned_data['choice']
-            user = request.user.profile
-            Choice.objects.create(name=choice, user=user)
-            return redirect('user_list')
+        if 'category' in request.POST: 
+            category_form = CategoryForm(request.POST)
+            if category_form.is_valid():
+                category = category_form.cleaned_data['category']
+                request.session['category'] = category.name #1
+                user_list = Choice.objects.filter(user=user, category=category)
+                if user_list.count() > 0:
+                    prev_list = user_list.first()
+                    choices_form = ChoicesForm(initial={'choice_1': prev_list.choice_1, 'choice_2': prev_list.choice_2})
+                else:
+                    choices_form = ChoicesForm()
+                choices_form.fields['choice_1'].queryset = Object.objects.filter(category=category)
+                choices_form.fields['choice_2'].queryset = Object.objects.filter(category=category)
+                
+        elif 'choices' in request.POST: 
+            category = Category.objects.get(name=request.session['category'])
+            choices_form = ChoicesForm(request.POST)
+            if choices_form.is_valid():
+                choice_1 = choices_form.cleaned_data['choice_1']
+                choice_2 = choices_form.cleaned_data['choice_2']
+
+                user_list = Choice.objects.filter(user=user, category=category)
+                # LIST UPDATED MESSAGE?
+                if user_list.count() > 0: 
+                    user_list.update(choice_1=choice_1, choice_2=choice_2)
+                else:
+                    list_object = Choice.create(choice_1=choice_1, choice_2=choice_2, user=user)
+                    list_object.save()
+            choices_form.fields['choice_1'].queryset = Object.objects.filter(category=category)
+            choices_form.fields['choice_2'].queryset = Object.objects.filter(category=category)
+            category_form = CategoryForm(initial={'category': category})
+        
     else:
-        form = ListForm(category=category)
-    return render(request, 'core/submit_lists.html', {'form': form, 'category': cat_name})
-'''
+        category = Category.objects.get(name=request.session['category'])
+        category_form = CategoryForm(initial={'category': category})
+        user_list = Choice.objects.filter(user=user, category=category)
+        if user_list.count() > 0:
+            prev_list = user_list.first()
+            choices_form = ChoicesForm(initial={'choice_1': prev_list.choice_1, 'choice_2': prev_list.choice_2})
+        else:
+            choices_form = ChoicesForm()
+        choices_form.fields['choice_1'].queryset = Object.objects.filter(category=category)
+        choices_form.fields['choice_2'].queryset = Object.objects.filter(category=category)
+
+    return render(request, 'core/submit_choice.html', {'category_form': category_form, 'choices_form': choices_form })
 
 @login_required
 def user_list(request):

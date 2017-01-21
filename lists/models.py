@@ -31,15 +31,17 @@ class UserProfile(models.Model):
 
 class Choice(models.Model):
 
-    name = models.ForeignKey(Object, on_delete=models.CASCADE)
+    #name = models.ForeignKey(Object, on_delete=models.CASCADE)
+    choice_1 = models.ForeignKey(Object, on_delete=models.CASCADE, related_name='choice_1')
+    choice_2 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_2')
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    #category = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     
     @classmethod
-    def create(cls, name, user):
-        choice = cls(name=name, user=user, category=name.category)
+    def create(cls, choice_1, choice_2, user):
+        choice = cls(choice_1=choice_1, choice_2=choice_2, user=user, category=choice_1.category)
         return choice
 
     def __str__(self):
-        return "%s, %s, %s" % (self.user, self.name, self.name.category)
+        return "%s, %s, %s, %s" % (self.user, self.choice_1, self.choice_2, self.choice_1.category)
+        #return "%s, %s, %s" % (self.user, self.name, self.name.category)
