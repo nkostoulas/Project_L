@@ -18,52 +18,55 @@ def submit_choice(request):
     user = request.user.profile
 
     if 'category' not in request.session:
-        request.session['category'] = 'Restaurant'    
+        request.session['category'] = 'Restaurants'    
+
+    category = Category.objects.get(name=request.session['category'])
 
     if request.method == 'POST':
         if 'category' in request.POST: 
             category_form = CategoryForm(request.POST)
             if category_form.is_valid():
                 category = category_form.cleaned_data['category']
-                request.session['category'] = category.name #1
+                request.session['category'] = category.name
                 user_list = Choice.objects.filter(user=user, category=category)
                 if user_list.count() > 0:
                     prev_list = user_list.first()
-                    choices_form = ChoicesForm(initial={'choice_1': prev_list.choice_1, 'choice_2': prev_list.choice_2})
+                    choices_form = ChoicesForm(initial={'choice_1': prev_list.choice_1, 'choice_2': prev_list.choice_2, 'choice_3': prev_list.choice_3,
+                                                'choice_4': prev_list.choice_4, 'choice_5': prev_list.choice_5})
                 else:
                     choices_form = ChoicesForm()
-                choices_form.fields['choice_1'].queryset = Object.objects.filter(category=category)
-                choices_form.fields['choice_2'].queryset = Object.objects.filter(category=category)
-                
         elif 'choices' in request.POST: 
-            category = Category.objects.get(name=request.session['category'])
             choices_form = ChoicesForm(request.POST)
             if choices_form.is_valid():
                 choice_1 = choices_form.cleaned_data['choice_1']
                 choice_2 = choices_form.cleaned_data['choice_2']
+                choice_3 = choices_form.cleaned_data['choice_3']
+                choice_4 = choices_form.cleaned_data['choice_4']
+                choice_5 = choices_form.cleaned_data['choice_5']
 
                 user_list = Choice.objects.filter(user=user, category=category)
-                # LIST UPDATED MESSAGE?
                 if user_list.count() > 0: 
-                    user_list.update(choice_1=choice_1, choice_2=choice_2)
+                    user_list.update(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5)
                 else:
-                    list_object = Choice.create(choice_1=choice_1, choice_2=choice_2, user=user)
+                    list_object = Choice.create(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5, user=user)
                     list_object.save()
-            choices_form.fields['choice_1'].queryset = Object.objects.filter(category=category)
-            choices_form.fields['choice_2'].queryset = Object.objects.filter(category=category)
-            category_form = CategoryForm(initial={'category': category})
-        
     else:
-        category = Category.objects.get(name=request.session['category'])
-        category_form = CategoryForm(initial={'category': category})
         user_list = Choice.objects.filter(user=user, category=category)
         if user_list.count() > 0:
             prev_list = user_list.first()
-            choices_form = ChoicesForm(initial={'choice_1': prev_list.choice_1, 'choice_2': prev_list.choice_2})
+            choices_form = ChoicesForm(initial={'choice_1': prev_list.choice_1, 'choice_2': prev_list.choice_2, 'choice_3': prev_list.choice_3,
+                                                'choice_4': prev_list.choice_4, 'choice_5': prev_list.choice_5})
         else:
             choices_form = ChoicesForm()
-        choices_form.fields['choice_1'].queryset = Object.objects.filter(category=category)
-        choices_form.fields['choice_2'].queryset = Object.objects.filter(category=category)
+        
+
+    category = Category.objects.get(name=request.session['category'])
+    category_form = CategoryForm(initial={'category': category})
+    choices_form.fields['choice_1'].queryset = Object.objects.filter(category=category)
+    choices_form.fields['choice_2'].queryset = Object.objects.filter(category=category)
+    choices_form.fields['choice_3'].queryset = Object.objects.filter(category=category)
+    choices_form.fields['choice_4'].queryset = Object.objects.filter(category=category)
+    choices_form.fields['choice_5'].queryset = Object.objects.filter(category=category)
 
     return render(request, 'core/submit_choice.html', {'category_form': category_form, 'choices_form': choices_form })
 

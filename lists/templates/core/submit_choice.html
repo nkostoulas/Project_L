@@ -6,10 +6,7 @@
   <form method="post" name="Category Form">
     {% csrf_token %}
     {{ category_form }}
-    {{ category_form.errors }}
-    {{ category_form.non_field_errors }}
-    <input type="submit" name='category' value="!" />
-   <!--<button type="submit" name="category">Next</button>-->
+    <input type="submit" id="categoryButton" value="" style="display: none;" />
   </form>
 
   <form method="post" name="Choices Form">

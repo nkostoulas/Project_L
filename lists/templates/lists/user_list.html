@@ -16,20 +16,24 @@
         <li class="nav-item">
           <a class="nav-link" href="/submit_choice">My Lists</a>
         </li>
+        <!--
         <li class="nav-item">
           <a class="nav-link" href="/settings">Settings</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/password">Change Password</a>
         </li>
+        -->
         <li class="nav-item">
           <a class="nav-link" href="/logout">logout</a>
         </li>
       {% else %}
+        <!--
         <li class="nav-item active">
           <a class="nav-link" href="/signup">Sign Up <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
+        -->
+        <li class="nav-item active">
           <a class="nav-link" href="/login">Login</a>
         </li>
       {% endif %}
@@ -49,57 +53,29 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <p>These are <b>Nick's</b> favourite things:</p>
+        <p>These are <b> {{ request.user.first_name }}'s</b> favourite things:</p>
       </div>
     </div>
 
     <div style="height:20px"></div>
 
-    {% for choice in user_choices %}
-
-      {{ choice.name.name }}
-
-    {% endfor %}
-
     <div class="row">
-      <div class="col-md-4">
+      {% for list in user_choices %}
+
+        <div class="col-md-4">
         <div class="list-group">
           <a href="#" class="list-group-item active">
-            Restaurants
+            {{list.category.name}}
           </a>
-          <a href="#" class="list-group-item list-group-item-action">1. Eat Tokyo</a>
-          <a href="#" class="list-group-item list-group-item-action">2. Princi</a>
-          <a href="#" class="list-group-item list-group-item-action">3. Nobu</a>
-          <a href="#" class="list-group-item list-group-item-action">4. Royal China</a>
-          <a href="#" class="list-group-item list-group-item-action">5. Cafe East</a>
+          <a href="#" class="list-group-item list-group-item-action">1. {{ list.choice_1.name }}</a>
+          <a href="#" class="list-group-item list-group-item-action">2. {{ list.choice_2.name }}</a>
+          <a href="#" class="list-group-item list-group-item-action">3. {{ list.choice_3.name }}</a>
+          <a href="#" class="list-group-item list-group-item-action">4. {{ list.choice_4.name }}</a>
+          <a href="#" class="list-group-item list-group-item-action">5. {{ list.choice_5.name }}</a>
         </div>
       </div>
 
-      <div class="col-md-4">
-        <div class="list-group">
-          <a href="#" class="list-group-item active">
-            Music
-          </a>
-          <a href="#" class="list-group-item list-group-item-action">1. Sigur Ros</a>
-          <a href="#" class="list-group-item list-group-item-action">2. Kaskade</a>
-          <a href="#" class="list-group-item list-group-item-action">3. Michelle Branch</a>
-          <a href="#" class="list-group-item list-group-item-action">4. Counting Crows</a>
-          <a href="#" class="list-group-item list-group-item-action">5. Coldplay</a>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="list-group">
-          <a href="#" class="list-group-item active">
-            Video games
-          </a>
-          <a href="#" class="list-group-item list-group-item-action">1. Dota 2</a>
-          <a href="#" class="list-group-item list-group-item-action">2. Starcraft: Broodwar</a>
-          <a href="#" class="list-group-item list-group-item-action">3. Ori and the Blind Forest</a>
-          <a href="#" class="list-group-item list-group-item-action">4. Red Alert 2</a>
-          <a href="#" class="list-group-item list-group-item-action">5. Seven Kingdoms</a>
-        </div>
-      </div>
+      {% endfor %}
     </div>
   </div>
 
