@@ -55,11 +55,15 @@
 
     <div style="height:20px"></div>
 
-    {% for choice in user_choices %}
+    {% if user_choices %}
 
-      {{ choice.name.name }}
+      {% for choice in user_choices %}
 
-    {% endfor %}
+        {{ choice.name.name }}
+
+      {% endfor %}
+
+    {% endif %}
 
     <div class="row">
       <div class="col-md-4">
