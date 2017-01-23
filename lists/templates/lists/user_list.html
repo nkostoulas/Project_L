@@ -11,7 +11,7 @@
       <ul class="nav navbar-nav mr-auto">
       {% if user.is_authenticated %}
         <li class="nav-item active">
-          <a class="nav-link" href="/user_list">{{ user.username}} <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/user_list">{{ user.first_name }}<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/submit_choice">My Lists</a>
@@ -53,7 +53,8 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <p>These are <b> {{ request.user.first_name }}'s</b> favourite things:</p>
+        <h1>Hello, <b> {{ request.user.first_name }}</b>.</h1>
+        <h3>Here are your favourite things:</h3>
       </div>
     </div>
 
@@ -64,14 +65,15 @@
 
         <div class="col-md-4">
         <div class="list-group">
-          <a href="#" class="list-group-item active">
-            {{list.category.name}}
+          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+            <h4>{{ list.category.name }}</h4>
+            <p><i>{{ list.category.description }}</i></p>
           </a>
-          <a href="#" class="list-group-item list-group-item-action">1. {{ list.choice_1.name }}</a>
-          <a href="#" class="list-group-item list-group-item-action">2. {{ list.choice_2.name }}</a>
-          <a href="#" class="list-group-item list-group-item-action">3. {{ list.choice_3.name }}</a>
-          <a href="#" class="list-group-item list-group-item-action">4. {{ list.choice_4.name }}</a>
-          <a href="#" class="list-group-item list-group-item-action">5. {{ list.choice_5.name }}</a>
+          <a href="{{ list.choice_1.url }}" target="_blank" class="list-group-item list-group-item-action">1. {{ list.choice_1.name }}</a>
+          <a href="{{ list.choice_2.url }}" target="_blank" class="list-group-item list-group-item-action">2. {{ list.choice_2.name }}</a>
+          <a href="{{ list.choice_3.url }}" target="_blank" class="list-group-item list-group-item-action">3. {{ list.choice_3.name }}</a>
+          <a href="{{ list.choice_4.url }}" target="_blank" class="list-group-item list-group-item-action">4. {{ list.choice_4.name }}</a>
+          <a href="{{ list.choice_5.url }}" target="_blank" class="list-group-item list-group-item-action">5. {{ list.choice_5.name }}</a>
         </div>
       </div>
 

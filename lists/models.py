@@ -39,7 +39,7 @@ class Choice(models.Model):
     choice_5 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_5')
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    
+
     @classmethod
     def create(cls, choice_1, choice_2, choice_3, choice_4, choice_5, user):
         choice = cls(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5,

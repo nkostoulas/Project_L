@@ -45,7 +45,6 @@ PREREQ_APPS = [
 
 PROJECT_APPS = [
     'lists',
-    'login',
     'projectl',
 ]
 
@@ -127,7 +126,7 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '80f844ae2094f65dcb2a9af46e23c903'  # App Secret
 
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email',] ##for user_location and dob Facebook has to review how app is used
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'fields': 'id,name,first_name,last_name,link,email,gender,age_range,locale', 
+    'fields': 'id,name,first_name,last_name,link,email,gender,age_range,locale',
 }
 
 SOCIAL_AUTH_PIPELINE = (

@@ -18,12 +18,12 @@ def submit_choice(request):
     user = request.user.profile
 
     if 'category' not in request.session:
-        request.session['category'] = 'Restaurants'    
+        request.session['category'] = 'Restaurants'
 
     category = Category.objects.get(name=request.session['category'])
 
     if request.method == 'POST':
-        if 'category' in request.POST: 
+        if 'category' in request.POST:
             category_form = CategoryForm(request.POST)
             if category_form.is_valid():
                 category = category_form.cleaned_data['category']
@@ -35,7 +35,7 @@ def submit_choice(request):
                                                 'choice_4': prev_list.choice_4, 'choice_5': prev_list.choice_5})
                 else:
                     choices_form = ChoicesForm()
-        elif 'choices' in request.POST: 
+        elif 'choices' in request.POST:
             choices_form = ChoicesForm(request.POST)
             if choices_form.is_valid():
                 choice_1 = choices_form.cleaned_data['choice_1']
@@ -45,7 +45,7 @@ def submit_choice(request):
                 choice_5 = choices_form.cleaned_data['choice_5']
 
                 user_list = Choice.objects.filter(user=user, category=category)
-                if user_list.count() > 0: 
+                if user_list.count() > 0:
                     user_list.update(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5)
                 else:
                     list_object = Choice.create(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5, user=user)
@@ -58,7 +58,7 @@ def submit_choice(request):
                                                 'choice_4': prev_list.choice_4, 'choice_5': prev_list.choice_5})
         else:
             choices_form = ChoicesForm()
-        
+
 
     category = Category.objects.get(name=request.session['category'])
     category_form = CategoryForm(initial={'category': category})
@@ -75,9 +75,9 @@ def user_list(request):
 
     if request.user.email=="":
         return redirect('email')
-    
+
     user_choices = Choice.objects.filter(user=request.user.profile)
-    
+
     return render(request, 'lists/user_list.html', {'user_choices': user_choices})
 
 @login_required

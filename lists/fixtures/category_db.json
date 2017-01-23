@@ -1,0 +1,34 @@
+[
+ {
+   "model": "lists.Category",
+   "pk": 0,
+   "fields": {
+      "name": "Restaurants",
+      "description": "Do you live to eat or eat to live?"
+   }
+},
+ {
+   "model": "lists.Category",
+   "pk": 1,
+   "fields": {
+      "name": "Cafes",
+      "description": "Find your inner hipster."
+   }
+},
+ {
+   "model": "lists.Category",
+   "pk": 2,
+   "fields": {
+      "name": "Books",
+      "description": "So many books, so little time."
+   }
+},
+ {
+   "model": "lists.Category",
+   "pk": 3,
+   "fields": {
+      "name": "Video games",
+      "description": "Video games ruined my life. Good thing I have two more."
+   }
+}
+]
