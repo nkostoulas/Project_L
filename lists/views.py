@@ -4,71 +4,70 @@ from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash, login, authenticate
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from social_django.models import UserSocialAuth
 from .models import Choice, UserProfile, Category, Object
 from .forms import EmailForm, ChoicesForm, CategoryForm
-# Create your views here.
+from django.core.urlresolvers import reverse
 
+# Create your views here.
 def home(request):
     return render(request, 'home.html')
 
 @login_required
-def submit_choice(request):
+def edit_category(request):
+    if request.is_ajax():
+        request.session['category'] = request.POST['category']
+    return HttpResponse('')
+
+@login_required
+def edit(request, category):
+    request.session['category'] = category
+    return redirect('edit_list')
+
+@login_required
+def edit_list(request):
+
+    category_name = request.session['category']
 
     user = request.user.profile
-
-    if 'category' not in request.session:
-        request.session['category'] = 'Restaurants'
-
-    category = Category.objects.get(name=request.session['category'])
+    list_category = Category.objects.get(name=category_name)
 
     if request.method == 'POST':
-        if 'category' in request.POST:
-            category_form = CategoryForm(request.POST)
-            if category_form.is_valid():
-                category = category_form.cleaned_data['category']
-                request.session['category'] = category.name
-                user_list = Choice.objects.filter(user=user, category=category)
-                if user_list.count() > 0:
-                    prev_list = user_list.first()
-                    choices_form = ChoicesForm(initial={'choice_1': prev_list.choice_1, 'choice_2': prev_list.choice_2, 'choice_3': prev_list.choice_3,
-                                                'choice_4': prev_list.choice_4, 'choice_5': prev_list.choice_5})
-                else:
-                    choices_form = ChoicesForm()
-        elif 'choices' in request.POST:
-            choices_form = ChoicesForm(request.POST)
-            if choices_form.is_valid():
-                choice_1 = choices_form.cleaned_data['choice_1']
-                choice_2 = choices_form.cleaned_data['choice_2']
-                choice_3 = choices_form.cleaned_data['choice_3']
-                choice_4 = choices_form.cleaned_data['choice_4']
-                choice_5 = choices_form.cleaned_data['choice_5']
+        choices_form = ChoicesForm(request.POST)
+        if choices_form.is_valid():
+            choice_1 = choices_form.cleaned_data['choice_1']
+            choice_2 = choices_form.cleaned_data['choice_2']
+            choice_3 = choices_form.cleaned_data['choice_3']
+            choice_4 = choices_form.cleaned_data['choice_4']
+            choice_5 = choices_form.cleaned_data['choice_5']
 
-                user_list = Choice.objects.filter(user=user, category=category)
-                if user_list.count() > 0:
-                    user_list.update(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5)
-                else:
-                    list_object = Choice.create(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5, user=user)
-                    list_object.save()
+            user_list = Choice.objects.filter(user=user, category=list_category)
+            if user_list.count() > 0:
+                user_list.update(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5)
+            else:
+                list_object = Choice.create(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5, user=user)
+                list_object.save()
+
+            return render(request, 'lists/edit_sucess.html', {'category': list_category})
     else:
-        user_list = Choice.objects.filter(user=user, category=category)
+        user_list = Choice.objects.filter(user=user, category=list_category)
         if user_list.count() > 0:
             prev_list = user_list.first()
-            choices_form = ChoicesForm(initial={'choice_1': prev_list.choice_1, 'choice_2': prev_list.choice_2, 'choice_3': prev_list.choice_3,
-                                                'choice_4': prev_list.choice_4, 'choice_5': prev_list.choice_5})
+            choices_form = ChoicesForm(initial={'choice_1': prev_list.choice_1, 'choice_2': prev_list.choice_2, 
+                        'choice_3': prev_list.choice_3, 'choice_4': prev_list.choice_4, 'choice_5': prev_list.choice_5})
         else:
             choices_form = ChoicesForm()
 
+    choices_form.fields['choice_1'].queryset = Object.objects.filter(category=list_category)
+    choices_form.fields['choice_2'].queryset = Object.objects.filter(category=list_category)
+    choices_form.fields['choice_3'].queryset = Object.objects.filter(category=list_category)
+    choices_form.fields['choice_4'].queryset = Object.objects.filter(category=list_category)
+    choices_form.fields['choice_5'].queryset = Object.objects.filter(category=list_category)
 
-    category = Category.objects.get(name=request.session['category'])
-    category_form = CategoryForm(initial={'category': category})
-    choices_form.fields['choice_1'].queryset = Object.objects.filter(category=category)
-    choices_form.fields['choice_2'].queryset = Object.objects.filter(category=category)
-    choices_form.fields['choice_3'].queryset = Object.objects.filter(category=category)
-    choices_form.fields['choice_4'].queryset = Object.objects.filter(category=category)
-    choices_form.fields['choice_5'].queryset = Object.objects.filter(category=category)
+    #form_action = reverse(name)
 
-    return render(request, 'core/submit_choice.html', {'category_form': category_form, 'choices_form': choices_form })
+    return render(request, 'lists/edit_list.html', {'form': choices_form, 'category_name':category_name})
 
 @login_required
 def user_list(request):
@@ -77,8 +76,13 @@ def user_list(request):
         return redirect('email')
 
     user_choices = Choice.objects.filter(user=request.user.profile)
+    answered_categories = []
+    for list in user_choices:
+        answered_categories.append(list.category)
 
-    return render(request, 'lists/user_list.html', {'user_choices': user_choices})
+    unanswered_categories = Category.objects.exclude(name__in = answered_categories)
+
+    return render(request, 'lists/user_list.html', {'user_choices': user_choices, 'unanswered_categories': unanswered_categories})
 
 @login_required
 def email(request):

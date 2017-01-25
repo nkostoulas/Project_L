@@ -64,18 +64,102 @@
       {% for list in user_choices %}
 
         <div class="col-md-4">
+          <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+              <h4>{{ list.category.name }}</h4>
+              <p><i>{{ list.category.description }}</i></p>
+            </a>
+            <a href="{{ list.choice_1.url }}" target="_blank" class="list-group-item list-group-item-action">1. {{ list.choice_1.name }}</a>
+            <a href="{{ list.choice_2.url }}" target="_blank" class="list-group-item list-group-item-action">2. {{ list.choice_2.name }}</a>
+            <a href="{{ list.choice_3.url }}" target="_blank" class="list-group-item list-group-item-action">3. {{ list.choice_3.name }}</a>
+            <a href="{{ list.choice_4.url }}" target="_blank" class="list-group-item list-group-item-action">4. {{ list.choice_4.name }}</a>
+            <a href="{{ list.choice_5.url }}" target="_blank" class="list-group-item list-group-item-action">5. {{ list.choice_5.name }}</a>
+          </div>
+          
+          <div style="height:10px"></div>
+
+
+          {% block extra_js%}
+            <script src="http://malsup.github.com/jquery.form.js"></script>
+          {% endblock %}
+
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{list.category.name}}" 
+          href="{% url 'edit' category=list.category.name %}"> 
+            Edit 
+          </button>
+
+          <div class="modal fade" id="modal{{list.category.name}}">
+            {% include "lists/edit_list.html" %}
+          </div>
+
+          <script>
+            $('#modal{{list.category.name}}').on('hidden.bs.modal', function () {
+              location.reload();
+            })
+
+            $('#modal{{list.category.name}}').on('show.bs.modal', function (event) {
+              var modal = $(this)
+              $.ajax({
+                url: "{% url 'edit' category=list.category.name %}",
+                context: document.body
+              }).done(function(response) {
+                modal.html(response);
+              });
+            })
+          </script>
+        
+
+
+
+        <div style="height:30px"></div>
+        </div>
+
+      {% endfor %}
+
+      {% for category in unanswered_categories %}
+
+        <div class="col-md-4">
         <div class="list-group">
           <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-            <h4>{{ list.category.name }}</h4>
-            <p><i>{{ list.category.description }}</i></p>
+            <h4>{{ category.name}}</h4>
+            <p><i>{{ category.description }}</i></p>
           </a>
-          <a href="{{ list.choice_1.url }}" target="_blank" class="list-group-item list-group-item-action">1. {{ list.choice_1.name }}</a>
-          <a href="{{ list.choice_2.url }}" target="_blank" class="list-group-item list-group-item-action">2. {{ list.choice_2.name }}</a>
-          <a href="{{ list.choice_3.url }}" target="_blank" class="list-group-item list-group-item-action">3. {{ list.choice_3.name }}</a>
-          <a href="{{ list.choice_4.url }}" target="_blank" class="list-group-item list-group-item-action">4. {{ list.choice_4.name }}</a>
-          <a href="{{ list.choice_5.url }}" target="_blank" class="list-group-item list-group-item-action">5. {{ list.choice_5.name }}</a>
+          <p class="list-group-item list-group-item-action">1. -- </p>
+          <p class="list-group-item list-group-item-action">2. -- </p>
+          <p class="list-group-item list-group-item-action">3. -- </p>
+          <p class="list-group-item list-group-item-action">4. -- </p>
+          <p class="list-group-item list-group-item-action">5. -- </p>
         </div>
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{category.name}}" 
+          href="{% url 'edit' category=category.name %}"> 
+            Edit 
+          </button>
+
+          <div class="modal fade" id="modal{{category.name}}">
+            {% include "lists/edit_list.html" %}
+          </div>
+
+          <script>
+            $('#modal{{category.name}}').on('hidden.bs.modal', function () {
+              location.reload();
+            })
+
+            $('#modal{{category.name}}').on('show.bs.modal', function (event) {
+              var modal = $(this)
+              $.ajax({
+                url: "{% url 'edit' category=category.name %}",
+                context: document.body
+              }).done(function(response) {
+                modal.html(response);
+              });
+            })
+          </script>
+
+        <div style="height:30px"></div> 
       </div>
+
+      
 
       {% endfor %}
     </div>
