@@ -9,10 +9,9 @@ urlpatterns = [
 	#	lists views
 	url(r'^$', views.home, name='home'),	
     #url(r'^login/$', auth_views.login, {'template_name': 'registration/login.html'}, name='login'),
-	url(r'^logout/$', auth_views.logout, {'template_name': 'home.html'}, name='logout'),		
+	url(r'^logout/$', auth_views.logout, {'template_name': 'projectl/home.html'}, name='logout'),		
 	url(r'^email/$', views.email, name='email'),
 	url(r'^user_list/$', views.user_list, name='user_list'),	
-	url(r'^edit_list/$', views.edit_list, name='edit_list'),	
 	url(r'^edit/(?P<category>\d+)/$', views.edit, name='edit'),
 
 	#	from apps

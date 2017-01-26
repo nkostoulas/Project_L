@@ -4,25 +4,18 @@ from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash, login, authenticate
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from social_django.models import UserSocialAuth
 from .models import Choice, Category, Object
 from .forms import EmailForm, ChoicesForm
+from django.core.urlresolvers import reverse
 
 # Create your views here.
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'projectl/home.html')
 
 @login_required
 def edit(request, category):
-    request.session['category_pk'] = category
-    return redirect('edit_list')
-
-@login_required
-def edit_list(request):
-
-    category_pk = request.session['category_pk']
-    list_category = Category.objects.get(pk=category_pk)
+    list_category = Category.objects.get(pk=category)
     user = request.user.profile
 
     if request.method == 'POST':
@@ -40,8 +33,7 @@ def edit_list(request):
             else:
                 list_object = Choice.create(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5, user=user)
                 list_object.save()
-
-            return render(request, 'lists/edit_list.html', {'category': list_category})
+            return render(request, 'lists/edit_success.html', {'category': list_category})
     else:
         user_list = Choice.objects.filter(user=user, category=list_category)
         if user_list.count() > 0:
@@ -57,7 +49,9 @@ def edit_list(request):
     choices_form.fields['choice_4'].queryset = Object.objects.filter(category=list_category)
     choices_form.fields['choice_5'].queryset = Object.objects.filter(category=list_category)
 
-    return render(request, 'lists/edit_list.html', {'form': choices_form, 'category_name':list_category.name, 'category_pk': category_pk})
+    url_reverse = reverse('edit', args=[list_category.pk])
+
+    return render(request, 'lists/edit.html', {'form': choices_form, 'category': list_category, 'url_reverse': url_reverse})
 
 @login_required
 def user_list(request):
@@ -85,7 +79,7 @@ def email(request):
             return redirect('user_list')
     else:
         form = EmailForm()
-    return render(request, 'registration/email.html', {'form': form})
+    return render(request, 'projectl/email.html', {'form': form})
 
 # MIGHT USE IN THE FUTURE
 '''

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'projectl/base.html' %}
 
 {% block content %}
   <!-- Fixed navbar -->
@@ -6,7 +6,7 @@
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="/">Project L</a>
+    <a class="navbar-brand" href="/user_list">Project L</a>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="nav navbar-nav mr-auto">
       {% if user.is_authenticated %}
@@ -65,18 +65,13 @@
           
           <div style="height:10px"></div>
 
-
-          {% block extra_js%}
-            <script src="http://malsup.github.com/jquery.form.js"></script>
-          {% endblock %}
-
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{list.category.pk}}" 
-          href="{% url 'edit' category=list.category.pk %}"> 
+          href="{% url 'edit' list.category.pk %}"> 
             Edit 
           </button>
 
           <div class="modal fade" id="modal{{list.category.pk}}">
-            {% include 'lists/edit_list.html' %}
+            {% include 'lists/edit.html' %}
           </div>
 
           <script>
@@ -87,7 +82,7 @@
             $('#modal{{list.category.pk}}').on('show.bs.modal', function (event) {
               var modal = $(this)
               $.ajax({
-                url: "{% url 'edit' category=list.category.pk %}",
+                url: "{% url 'edit' list.category.pk %}",
                 context: document.body
               }).done(function(response) {
                 modal.html(response);
@@ -115,13 +110,13 @@
           <p class="list-group-item list-group-item-action">5. -- </p>
         </div>
 
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{category.pk}}" 
-          href="{% url 'edit' category=category.pk %}"> 
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{category.pk}}" 
+          href="{% url 'edit' category.pk %}"> 
             Edit 
           </button>
 
           <div class="modal fade" id="modal{{category.pk}}">
-            {% include 'lists/edit_list.html' %}
+            {% include 'lists/edit.html' %}
           </div>
 
           <script>
@@ -132,7 +127,7 @@
             $('#modal{{category.pk}}').on('show.bs.modal', function (event) {
               var modal = $(this)
               $.ajax({
-                url: "{% url 'edit' category=category.pk %}",
+                url: "{% url 'edit' category.pk %}",
                 context: document.body
               }).done(function(response) {
                 modal.html(response);
