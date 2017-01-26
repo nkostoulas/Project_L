@@ -6,32 +6,24 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from social_django.models import UserSocialAuth
-from .models import Choice, UserProfile, Category, Object
-from .forms import EmailForm, ChoicesForm, CategoryForm
-from django.core.urlresolvers import reverse
+from .models import Choice, Category, Object
+from .forms import EmailForm, ChoicesForm
 
 # Create your views here.
 def home(request):
     return render(request, 'home.html')
 
 @login_required
-def edit_category(request):
-    if request.is_ajax():
-        request.session['category'] = request.POST['category']
-    return HttpResponse('')
-
-@login_required
 def edit(request, category):
-    request.session['category'] = category
+    request.session['category_pk'] = category
     return redirect('edit_list')
 
 @login_required
 def edit_list(request):
 
-    category_name = request.session['category']
-
+    category_pk = request.session['category_pk']
+    list_category = Category.objects.get(pk=category_pk)
     user = request.user.profile
-    list_category = Category.objects.get(name=category_name)
 
     if request.method == 'POST':
         choices_form = ChoicesForm(request.POST)
@@ -49,7 +41,7 @@ def edit_list(request):
                 list_object = Choice.create(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5, user=user)
                 list_object.save()
 
-            return render(request, 'lists/edit_sucess.html', {'category': list_category})
+            return render(request, 'lists/edit_list.html', {'category': list_category})
     else:
         user_list = Choice.objects.filter(user=user, category=list_category)
         if user_list.count() > 0:
@@ -65,9 +57,7 @@ def edit_list(request):
     choices_form.fields['choice_4'].queryset = Object.objects.filter(category=list_category)
     choices_form.fields['choice_5'].queryset = Object.objects.filter(category=list_category)
 
-    #form_action = reverse(name)
-
-    return render(request, 'lists/edit_list.html', {'form': choices_form, 'category_name':category_name})
+    return render(request, 'lists/edit_list.html', {'form': choices_form, 'category_name':list_category.name, 'category_pk': category_pk})
 
 @login_required
 def user_list(request):
@@ -97,6 +87,8 @@ def email(request):
         form = EmailForm()
     return render(request, 'registration/email.html', {'form': form})
 
+# MIGHT USE IN THE FUTURE
+'''
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -147,3 +139,4 @@ def password(request):
     else:
         form = PasswordForm(request.user)
     return render(request, 'core/password.html', {'form': form})
+    '''

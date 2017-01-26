@@ -16,23 +16,10 @@
         <li class="nav-item">
           <a class="nav-link" href="/submit_choice">My Lists</a>
         </li>
-        <!--
-        <li class="nav-item">
-          <a class="nav-link" href="/settings">Settings</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/password">Change Password</a>
-        </li>
-        -->
         <li class="nav-item">
           <a class="nav-link" href="/logout">logout</a>
         </li>
       {% else %}
-        <!--
-        <li class="nav-item active">
-          <a class="nav-link" href="/signup">Sign Up <span class="sr-only">(current)</span></a>
-        </li>
-        -->
         <li class="nav-item active">
           <a class="nav-link" href="/login">Login</a>
         </li>
@@ -83,24 +70,24 @@
             <script src="http://malsup.github.com/jquery.form.js"></script>
           {% endblock %}
 
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{list.category.name}}" 
-          href="{% url 'edit' category=list.category.name %}"> 
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{list.category.pk}}" 
+          href="{% url 'edit' category=list.category.pk %}"> 
             Edit 
           </button>
 
-          <div class="modal fade" id="modal{{list.category.name}}">
-            {% include "lists/edit_list.html" %}
+          <div class="modal fade" id="modal{{list.category.pk}}">
+            {% include 'lists/edit_list.html' %}
           </div>
 
           <script>
-            $('#modal{{list.category.name}}').on('hidden.bs.modal', function () {
+            $('#modal{{list.category.pk}}').on('hidden.bs.modal', function () {
               location.reload();
             })
 
-            $('#modal{{list.category.name}}').on('show.bs.modal', function (event) {
+            $('#modal{{list.category.pk}}').on('show.bs.modal', function (event) {
               var modal = $(this)
               $.ajax({
-                url: "{% url 'edit' category=list.category.name %}",
+                url: "{% url 'edit' category=list.category.pk %}",
                 context: document.body
               }).done(function(response) {
                 modal.html(response);
@@ -108,9 +95,6 @@
             })
           </script>
         
-
-
-
         <div style="height:30px"></div>
         </div>
 
@@ -131,24 +115,24 @@
           <p class="list-group-item list-group-item-action">5. -- </p>
         </div>
 
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{category.name}}" 
-          href="{% url 'edit' category=category.name %}"> 
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{category.pk}}" 
+          href="{% url 'edit' category=category.pk %}"> 
             Edit 
           </button>
 
-          <div class="modal fade" id="modal{{category.name}}">
-            {% include "lists/edit_list.html" %}
+          <div class="modal fade" id="modal{{category.pk}}">
+            {% include 'lists/edit_list.html' %}
           </div>
 
           <script>
-            $('#modal{{category.name}}').on('hidden.bs.modal', function () {
+            $('#modal{{category.pk}}').on('hidden.bs.modal', function () {
               location.reload();
             })
 
-            $('#modal{{category.name}}').on('show.bs.modal', function (event) {
+            $('#modal{{category.pk}}').on('show.bs.modal', function (event) {
               var modal = $(this)
               $.ajax({
-                url: "{% url 'edit' category=category.name %}",
+                url: "{% url 'edit' category=category.pk %}",
                 context: document.body
               }).done(function(response) {
                 modal.html(response);
@@ -158,9 +142,7 @@
 
         <div style="height:30px"></div> 
       </div>
-
       
-
       {% endfor %}
     </div>
   </div>

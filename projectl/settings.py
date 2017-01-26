@@ -40,7 +40,6 @@ PREREQ_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social_django',
-    'smart_selects'
 ]
 
 PROJECT_APPS = [

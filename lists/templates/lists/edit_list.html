@@ -1,6 +1,5 @@
-
   <div class="modal-dialog" role="document">
-   <form action="{% url 'edit_list' %}" method="post" id="edit_list{{category_name}}" class="form">
+   <form action="{% url 'edit_list' %}" method="post" id="edit_list{{category_pk}}" class="form">
     {% csrf_token %}
     <div class="modal-content">
       <div class="modal-header">
@@ -23,9 +22,10 @@
      </div><!-- /.modal-content -->
     </form>
   </div><!-- /.modal-dialog -->
+
 <script>
-    var form_options = { target: '#modal{{category_name}}', success: function(response) {} };
-    $('#edit_list{{category_name}}').ajaxForm(form_options);
+    var form_options = { target: '#modal{{category_pk}}', success: function(response) {} };
+    $('#edit_list{{category_pk}}').ajaxForm(form_options);
 </script>
 
 

@@ -31,7 +31,6 @@ class UserProfile(models.Model):
 
 class Choice(models.Model):
 
-    #name = models.ForeignKey(Object, on_delete=models.CASCADE)
     choice_1 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_1')
     choice_2 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_2')
     choice_3 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_3')
@@ -48,4 +47,3 @@ class Choice(models.Model):
 
     def __str__(self):
         return "%s, %s, %s, %s" % (self.user, self.choice_1, self.choice_2, self.choice_1.category)
-        #return "%s, %s, %s" % (self.user, self.name, self.name.category)
