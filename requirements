@@ -4,3 +4,4 @@ Django
 python-social-auth
 social-auth-app-django
 django-smart-selects
+django-autocomplete-light

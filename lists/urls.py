@@ -3,6 +3,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from . import views
+from lists.views import edit_autocomplete
 
 urlpatterns = [
 
@@ -16,6 +17,7 @@ urlpatterns = [
 
 	#	from apps
     url(r'^oauth/', include('social_django.urls', namespace='social')),
+    url(r'^edit_autocomplete/$', edit_autocomplete.as_view(), name='edit-autocomplete'),
 
 	#	MIGHT USE IN THE FUTURE
 	#url(r'^password/$', views.password, name='password'),

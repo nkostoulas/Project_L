@@ -4,28 +4,47 @@ from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash, login, authenticate
 from django.contrib import messages
 from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse
+from dal import autocomplete
 from social_django.models import UserSocialAuth
 from .models import Choice, Category, Object
 from .forms import EmailForm, ChoicesForm
-from django.core.urlresolvers import reverse
 
 # Create your views here.
 def home(request):
     return render(request, 'projectl/home.html')
 
+
+class edit_autocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated():
+            return Country.objects.none()
+
+        category = Category.objects.get(pk=self.request.session['category'])
+        
+        #something happens with id = 0
+        qs = Object.objects.all()
+        qs = Object.objects.exclude(pk=0)   
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q, category=category)
+
+        return qs
+
 @login_required
 def edit(request, category):
+    request.session['category'] = category
     list_category = Category.objects.get(pk=category)
     user = request.user.profile
 
     if request.method == 'POST':
         choices_form = ChoicesForm(request.POST)
         if choices_form.is_valid():
-            choice_1 = choices_form.cleaned_data['choice_1']
-            choice_2 = choices_form.cleaned_data['choice_2']
-            choice_3 = choices_form.cleaned_data['choice_3']
-            choice_4 = choices_form.cleaned_data['choice_4']
-            choice_5 = choices_form.cleaned_data['choice_5']
+            choice_1 = Object.objects.get(name=choices_form.cleaned_data['choice_1'])
+            choice_2 = Object.objects.get(name=choices_form.cleaned_data['choice_2'])
+            choice_3 = Object.objects.get(name=choices_form.cleaned_data['choice_3'])
+            choice_4 = Object.objects.get(name=choices_form.cleaned_data['choice_4'])
+            choice_5 = Object.objects.get(name=choices_form.cleaned_data['choice_5'])
 
             user_list = Choice.objects.filter(user=user, category=list_category)
             if user_list.count() > 0:
@@ -42,12 +61,6 @@ def edit(request, category):
                         'choice_3': prev_list.choice_3, 'choice_4': prev_list.choice_4, 'choice_5': prev_list.choice_5})
         else:
             choices_form = ChoicesForm()
-
-    choices_form.fields['choice_1'].queryset = Object.objects.filter(category=list_category)
-    choices_form.fields['choice_2'].queryset = Object.objects.filter(category=list_category)
-    choices_form.fields['choice_3'].queryset = Object.objects.filter(category=list_category)
-    choices_form.fields['choice_4'].queryset = Object.objects.filter(category=list_category)
-    choices_form.fields['choice_5'].queryset = Object.objects.filter(category=list_category)
 
     url_reverse = reverse('edit', args=[list_category.pk])
 

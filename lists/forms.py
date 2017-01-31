@@ -1,15 +1,37 @@
 from django import forms
-from .models import Object
+from dal import autocomplete
+from .models import Object, Category
+
 
 class EmailForm(forms.Form):
     email = forms.EmailField(label=u'Type Email')
 
 class ChoicesForm(forms.Form):
-	choice_1 = forms.ModelChoiceField(queryset=Object.objects.all(), required=True)
-	choice_2 = forms.ModelChoiceField(queryset=Object.objects.all(), required=True)
-	choice_3 = forms.ModelChoiceField(queryset=Object.objects.all(), required=True)
-	choice_4 = forms.ModelChoiceField(queryset=Object.objects.all(), required=True)
-	choice_5 = forms.ModelChoiceField(queryset=Object.objects.all(), required=True)
+	choice_1 = forms.ModelChoiceField(queryset=Object.objects.all(), 
+		widget=autocomplete.ModelSelect2(url='edit-autocomplete',
+    	attrs={
+	        'data-minimum-input-length': 1,
+    	}), required=True)
+	choice_2 = forms.ModelChoiceField(queryset=Object.objects.all(), 
+		widget=autocomplete.ModelSelect2(url='edit-autocomplete',
+    	attrs={
+	        'data-minimum-input-length': 1,
+    	}), required=True)
+	choice_3 = forms.ModelChoiceField(queryset=Object.objects.all(), 
+		widget=autocomplete.ModelSelect2(url='edit-autocomplete',
+    	attrs={
+	        'data-minimum-input-length': 1,
+    	}), required=True)
+	choice_4 = forms.ModelChoiceField(queryset=Object.objects.all(), 
+		widget=autocomplete.ModelSelect2(url='edit-autocomplete',
+    	attrs={
+	        'data-minimum-input-length': 1,
+    	}), required=True)
+	choice_5 = forms.ModelChoiceField(queryset=Object.objects.all(), 
+		widget=autocomplete.ModelSelect2(url='edit-autocomplete',
+    	attrs={
+	        'data-minimum-input-length': 1,
+    	}), required=True)
 
 	def clean(self):
 		cleaned_data = super(ChoicesForm,self).clean()
@@ -20,6 +42,7 @@ class ChoicesForm(forms.Form):
 		choice_5 = cleaned_data.get('choice_5')
 
 		if choice_1 and choice_2 and choice_3 and choice_4 and choice_5:
+			
 			if choice_1==choice_2:
 				self._errors['choice_2'] = self.error_class(['Choices must be unique'])
 				del self.cleaned_data['choice_2']
