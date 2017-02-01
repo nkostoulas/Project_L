@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from dal import autocomplete
 from social_django.models import UserSocialAuth
-from .models import Choice, Category, Object
+from .models import UserChoiceList, Category, Object
 from .forms import EmailForm, ChoicesForm
 
 # Create your views here.
@@ -21,10 +21,10 @@ class edit_autocomplete(autocomplete.Select2QuerySetView):
             return Country.objects.none()
 
         category = Category.objects.get(pk=self.request.session['category'])
-        
+
         #something happens with id = 0
         qs = Object.objects.all()
-        qs = Object.objects.exclude(pk=0)   
+        qs = Object.objects.exclude(pk=0)
 
         if self.q:
             qs = qs.filter(name__istartswith=self.q, category=category)
@@ -40,24 +40,39 @@ def edit(request, category):
     if request.method == 'POST':
         choices_form = ChoicesForm(request.POST)
         if choices_form.is_valid():
-            choice_1 = Object.objects.get(name=choices_form.cleaned_data['choice_1'])
-            choice_2 = Object.objects.get(name=choices_form.cleaned_data['choice_2'])
-            choice_3 = Object.objects.get(name=choices_form.cleaned_data['choice_3'])
-            choice_4 = Object.objects.get(name=choices_form.cleaned_data['choice_4'])
-            choice_5 = Object.objects.get(name=choices_form.cleaned_data['choice_5'])
+            try:
+                choice_1 = Object.objects.get(name=choices_form.cleaned_data['choice_1'])
+            except:
+                choice_1 = None
+            try:
+                choice_2 = Object.objects.get(name=choices_form.cleaned_data['choice_2'])
+            except:
+                choice_2 = None
+            try:
+                choice_3 = Object.objects.get(name=choices_form.cleaned_data['choice_3'])
+            except:
+                choice_3 = None
+            try:
+                choice_4 = Object.objects.get(name=choices_form.cleaned_data['choice_4'])
+            except:
+                choice_4 = None
+            try:
+                choice_5 = Object.objects.get(name=choices_form.cleaned_data['choice_5'])
+            except:
+                choice_5 = None
 
-            user_list = Choice.objects.filter(user=user, category=list_category)
+            user_list = UserChoiceList.objects.filter(user=user, category=list_category)
             if user_list.count() > 0:
                 user_list.update(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5)
             else:
-                list_object = Choice.create(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5, user=user)
+                list_object = UserChoiceList.create(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5, user=user)
                 list_object.save()
             return render(request, 'lists/edit_success.html', {'category': list_category})
     else:
-        user_list = Choice.objects.filter(user=user, category=list_category)
+        user_list = UserChoiceList.objects.filter(user=user, category=list_category)
         if user_list.count() > 0:
             prev_list = user_list.first()
-            choices_form = ChoicesForm(initial={'choice_1': prev_list.choice_1, 'choice_2': prev_list.choice_2, 
+            choices_form = ChoicesForm(initial={'choice_1': prev_list.choice_1, 'choice_2': prev_list.choice_2,
                         'choice_3': prev_list.choice_3, 'choice_4': prev_list.choice_4, 'choice_5': prev_list.choice_5})
         else:
             choices_form = ChoicesForm()
@@ -72,7 +87,7 @@ def user_list(request):
     if request.user.email=="":
         return redirect('email')
 
-    user_choices = Choice.objects.filter(user=request.user.profile)
+    user_choices = UserChoiceList.objects.filter(user=request.user.profile)
     answered_categories = []
     for list in user_choices:
         answered_categories.append(list.category)

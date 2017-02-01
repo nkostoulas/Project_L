@@ -29,13 +29,13 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
-class Choice(models.Model):
+class UserChoiceList(models.Model):
 
-    choice_1 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_1')
-    choice_2 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_2')
-    choice_3 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_3')
-    choice_4 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_4')
-    choice_5 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_5')
+    choice_1 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_1', null=True)
+    choice_2 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_2', null=True)
+    choice_3 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_3', null=True)
+    choice_4 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_4', null=True)
+    choice_5 = models.ForeignKey(Object, on_delete = models.CASCADE, related_name='choice_5', null=True)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 

@@ -56,18 +56,18 @@
               <h4>{{ list.category.name }}</h4>
               <p><i>{{ list.category.description }}</i></p>
             </a>
-            <a href="{{ list.choice_1.url }}" target="_blank" class="list-group-item list-group-item-action">1. {{ list.choice_1.name }}</a>
-            <a href="{{ list.choice_2.url }}" target="_blank" class="list-group-item list-group-item-action">2. {{ list.choice_2.name }}</a>
-            <a href="{{ list.choice_3.url }}" target="_blank" class="list-group-item list-group-item-action">3. {{ list.choice_3.name }}</a>
-            <a href="{{ list.choice_4.url }}" target="_blank" class="list-group-item list-group-item-action">4. {{ list.choice_4.name }}</a>
-            <a href="{{ list.choice_5.url }}" target="_blank" class="list-group-item list-group-item-action">5. {{ list.choice_5.name }}</a>
+            <a href="{{ list.choice_1.url }}" {% if list.choice_1.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">1. {{ list.choice_1.name }}</a>
+            <a href="{{ list.choice_2.url }}" {% if list.choice_2.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">2. {{ list.choice_2.name }}</a>
+            <a href="{{ list.choice_3.url }}" {% if list.choice_3.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">3. {{ list.choice_3.name }}</a>
+            <a href="{{ list.choice_4.url }}" {% if list.choice_4.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">4. {{ list.choice_4.name }}</a>
+            <a href="{{ list.choice_5.url }}" {% if list.choice_5.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">5. {{ list.choice_5.name }}</a>
           </div>
-          
+
           <div style="height:10px"></div>
 
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{list.category.pk}}" 
-          href="{% url 'edit' list.category.pk %}"> 
-            Edit 
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{list.category.pk}}"
+          href="{% url 'edit' list.category.pk %}">
+            Edit
           </button>
 
           <div class="modal fade" id="modal{{list.category.pk}}">
@@ -89,7 +89,7 @@
               });
             })
           </script>
-        
+
         <div style="height:30px"></div>
         </div>
 
@@ -110,34 +110,36 @@
           <p class="list-group-item list-group-item-action">5. -- </p>
         </div>
 
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{category.pk}}" 
-          href="{% url 'edit' category.pk %}"> 
-            Edit 
-          </button>
+        <div style="height:10px"></div>
 
-          <div class="modal fade" id="modal{{category.pk}}">
-            {% include 'lists/edit.html' %}
-          </div>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{category.pk}}"
+        href="{% url 'edit' category.pk %}">
+          Edit
+        </button>
 
-          <script>
-            $('#modal{{category.pk}}').on('hidden.bs.modal', function () {
-              location.reload();
-            })
+        <div class="modal fade" id="modal{{category.pk}}">
+          {% include 'lists/edit.html' %}
+        </div>
 
-            $('#modal{{category.pk}}').on('show.bs.modal', function (event) {
-              var modal = $(this)
-              $.ajax({
-                url: "{% url 'edit' category.pk %}",
-                context: document.body
-              }).done(function(response) {
-                modal.html(response);
-              });
-            })
-          </script>
+        <script>
+          $('#modal{{category.pk}}').on('hidden.bs.modal', function () {
+            location.reload();
+          })
 
-        <div style="height:30px"></div> 
+          $('#modal{{category.pk}}').on('show.bs.modal', function (event) {
+            var modal = $(this)
+            $.ajax({
+              url: "{% url 'edit' category.pk %}",
+              context: document.body
+            }).done(function(response) {
+              modal.html(response);
+            });
+          })
+        </script>
+
+        <div style="height:30px"></div>
       </div>
-      
+
       {% endfor %}
     </div>
   </div>
