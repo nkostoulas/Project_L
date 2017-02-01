@@ -18,7 +18,7 @@ def home(request):
 class edit_autocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         if not self.request.user.is_authenticated():
-            return Country.objects.none()
+            return Object.objects.none()
 
         category = Category.objects.get(pk=self.request.session['category'])
 
@@ -26,6 +26,8 @@ class edit_autocomplete(autocomplete.Select2QuerySetView):
         qs = Object.objects.all()
         qs = Object.objects.exclude(pk=0)
 
+        qs = qs.filter(category=category)
+        
         if self.q:
             qs = qs.filter(name__icontains=self.q, category=category)
 
@@ -94,7 +96,9 @@ def user_list(request):
 
     unanswered_categories = Category.objects.exclude(name__in = answered_categories)
 
-    return render(request, 'lists/user_list.html', {'user_choices': user_choices, 'unanswered_categories': unanswered_categories})
+    all_categories = Category.objects.order_by('name')
+
+    return render(request, 'lists/user_list.html', {'user_choices': user_choices, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories})
 
 @login_required
 def email(request):

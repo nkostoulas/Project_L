@@ -14,12 +14,14 @@
     <link rel="stylesheet" type="text/css" href="{% static 'dal/select2.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'dal/vendor/select2/dist/css/select2.css' %}" />
 
-    <script type="text/javascript" src="{% static 'dal/jquery.init.js' %}"></script> 
+    <script type="text/javascript" src="{% static 'dal/jquery.init.js' %}"></script>
 
     <script type="text/javascript" src="{% static 'dal/autocomplete.init.js' %}"></script>
     <script type="text/javascript" src="{% static 'dal/select2.js' %}"></script>
     <script type="text/javascript" src="{% static 'dal/vendor/select2/dist/js/select2.full.js' %}"></script>
     <script type="text/javascript" src="{% static 'dal/forward.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/list_display_filter.js' %}"></script>
 
    <!-- <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script> -->
 
@@ -31,6 +33,8 @@
 
   {% block content %}
   {% endblock %}
+
+  <div style="height:100px"></div>
 
   <footer class="footer">
     <div class="container">

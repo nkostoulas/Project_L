@@ -5,6 +5,7 @@ class Category(models.Model):
 
     name = models.CharField(max_length=200, unique=True)
     description = models.TextField()
+    image = models.ImageField(upload_to = 'category_backgrounds/')
 
     def __str__(self):
         return self.name

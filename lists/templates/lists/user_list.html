@@ -1,5 +1,7 @@
 {% extends 'projectl/base.html' %}
 
+{% load staticfiles %}
+
 {% block content %}
   <!-- Fixed navbar -->
   <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
@@ -48,27 +50,74 @@
     <div style="height:20px"></div>
 
     <div class="row">
-      {% for list in user_choices %}
 
-        <div class="col-md-4">
-          <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-              <h4>{{ list.category.name }}</h4>
-              <p><i>{{ list.category.description }}</i></p>
-            </a>
-            <a href="{{ list.choice_1.url }}" {% if list.choice_1.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">1. {{ list.choice_1.name }}</a>
-            <a href="{{ list.choice_2.url }}" {% if list.choice_2.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">2. {{ list.choice_2.name }}</a>
-            <a href="{{ list.choice_3.url }}" {% if list.choice_3.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">3. {{ list.choice_3.name }}</a>
-            <a href="{{ list.choice_4.url }}" {% if list.choice_4.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">4. {{ list.choice_4.name }}</a>
-            <a href="{{ list.choice_5.url }}" {% if list.choice_5.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">5. {{ list.choice_5.name }}</a>
+      <!-- Category list -->
+      <div class="col-2">
+        <nav class="nav nav-pills nav-fill flex-column">
+          <a class="nav-link active filter-button" href="#" data-filter="all">All Categories</a>
+          {% for category in all_categories %}
+            <a class="nav-link filter-button" href="#" data-filter="{{ category.name|cut:' ' }}">{{ category.name }}</a>
+          {% endfor %}
+        </nav>
+      </div>
+
+      <!-- User Choices -->
+      <div class="col-5">
+        <div class="filter all">
+          <h4>Answered categories:</h4>
+            {% if user_choices.count < 1 %}
+            <div class="alert alert-warning" role="alert">
+              <strong>Nada!</strong> Fill in some categories below!
+            </div>
+            {% endif %}
+          <!-- Generic category titles -->
+          {% for list in user_choices %}
+          <div class="card">
+            <img class="card-img-top img-fluid" src="{% static list.category.image.url %}" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">{{ list.category.name }}</h4>
+              <p class="card-text">{{ list.category.description }}</p>
+            </div>
           </div>
+          <div style="height: 20px"></div>
+          {% endfor %}
 
-          <div style="height:10px"></div>
+          <div style="height:20px"></div>
 
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{list.category.pk}}"
-          href="{% url 'edit' list.category.pk %}">
-            Edit
-          </button>
+          <h4>Unanswered categories:</h4>
+          {% for category in unanswered_categories %}
+          <div class="card">
+            <img class="card-img-top img-fluid" src="{% static category.image.url %}" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">{{ category.name }}</h4>
+              <p class="card-text">{{ category.description }}</p>
+            </div>
+          </div>
+          <div style="height: 20px"></div>
+          {% endfor %}
+        </div>
+
+        <!-- User-answered categories -->
+        {% for list in user_choices %}
+
+          <div class="card filter {{ list.category.name|cut:' ' }}" style="display:none">
+            <img class="card-img-top img-fluid" src="{% static list.category.image.url %}" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">{{ list.category.name }}</h4>
+              <p class="card-text">{{ list.category.description }}</p>
+              <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal{{list.category.pk}}"
+              href="{% url 'edit' list.category.pk %}">
+                Update favourite {{ list.category.name|lower }}
+              </button>
+            </div>
+            <ul class="list-group list-group-flush">
+              <a href="{{ list.choice_1.url }}" {% if list.choice_1.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">1. {{ list.choice_1.name }}</a>
+              <a href="{{ list.choice_2.url }}" {% if list.choice_2.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">2. {{ list.choice_2.name }}</a>
+              <a href="{{ list.choice_3.url }}" {% if list.choice_3.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">3. {{ list.choice_3.name }}</a>
+              <a href="{{ list.choice_4.url }}" {% if list.choice_4.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">4. {{ list.choice_4.name }}</a>
+              <a href="{{ list.choice_5.url }}" {% if list.choice_5.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">5. {{ list.choice_5.name }}</a>
+            </ul>
+          </div>
 
           <div class="modal fade" id="modal{{list.category.pk}}">
             {% include 'lists/edit.html' %}
@@ -90,57 +139,64 @@
             })
           </script>
 
-        <div style="height:30px"></div>
-        </div>
+        {% endfor %}
 
-      {% endfor %}
+        <!-- Unanswered categories -->
+        {% for category in unanswered_categories %}
+          <div class="card filter {{ category.name|cut:' ' }}" style="display:none">
+            <img class="card-img-top img-fluid" src="{% static category.image.url %}" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">{{ category.name}}</h4>
+              <p class="card-text">{{ category.description }}</p>
+              <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#modal{{category.pk}}"
+              href="{% url 'edit' category.pk %}">
+                Fill in favourite {{ category.name|lower }}
+              </button>
+            </div>
+            <ul class="list-group list-group-flush">
+              <p class="list-group-item list-group-item-action">1. -- </p>
+              <p class="list-group-item list-group-item-action">2. -- </p>
+              <p class="list-group-item list-group-item-action">3. -- </p>
+              <p class="list-group-item list-group-item-action">4. -- </p>
+              <p class="list-group-item list-group-item-action">5. -- </p>
+            </ul>
+          </div>
 
-      {% for category in unanswered_categories %}
+          <div class="modal fade" id="modal{{category.pk}}">
+            {% include 'lists/edit.html' %}
+          </div>
 
-        <div class="col-md-4">
+          <script>
+            $('#modal{{category.pk}}').on('hidden.bs.modal', function () {
+              location.reload();
+            })
+
+            $('#modal{{category.pk}}').on('show.bs.modal', function (event) {
+              var modal = $(this)
+              $.ajax({
+                url: "{% url 'edit' category.pk %}",
+                context: document.body
+              }).done(function(response) {
+                modal.html(response);
+              });
+            })
+          </script>
+
+        {% endfor %}
+      </div>
+
+      <!-- Suggestions -->
+      <div class="col-5">
+        <h4>Recommendations for X</h4>
         <div class="list-group">
-          <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-            <h4>{{ category.name}}</h4>
-            <p><i>{{ category.description }}</i></p>
-          </a>
           <p class="list-group-item list-group-item-action">1. -- </p>
           <p class="list-group-item list-group-item-action">2. -- </p>
           <p class="list-group-item list-group-item-action">3. -- </p>
           <p class="list-group-item list-group-item-action">4. -- </p>
           <p class="list-group-item list-group-item-action">5. -- </p>
         </div>
-
-        <div style="height:10px"></div>
-
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{category.pk}}"
-        href="{% url 'edit' category.pk %}">
-          Edit
-        </button>
-
-        <div class="modal fade" id="modal{{category.pk}}">
-          {% include 'lists/edit.html' %}
-        </div>
-
-        <script>
-          $('#modal{{category.pk}}').on('hidden.bs.modal', function () {
-            location.reload();
-          })
-
-          $('#modal{{category.pk}}').on('show.bs.modal', function (event) {
-            var modal = $(this)
-            $.ajax({
-              url: "{% url 'edit' category.pk %}",
-              context: document.body
-            }).done(function(response) {
-              modal.html(response);
-            });
-          })
-        </script>
-
-        <div style="height:30px"></div>
       </div>
 
-      {% endfor %}
     </div>
   </div>
 
