@@ -27,7 +27,7 @@ class edit_autocomplete(autocomplete.Select2QuerySetView):
         qs = Object.objects.exclude(pk=0)
 
         if self.q:
-            qs = qs.filter(name__istartswith=self.q, category=category)
+            qs = qs.filter(name__icontains=self.q, category=category)
 
         return qs
 

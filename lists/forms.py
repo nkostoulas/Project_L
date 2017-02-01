@@ -10,27 +10,27 @@ class ChoicesForm(forms.Form):
 	choice_1 = forms.ModelChoiceField(queryset=Object.objects.all(),
 		widget=autocomplete.ModelSelect2(url='edit-autocomplete',
     	attrs={
-	        'data-minimum-input-length': 1,
+	        'data-minimum-input-length': 0,
     	}), required=False)
 	choice_2 = forms.ModelChoiceField(queryset=Object.objects.all(),
 		widget=autocomplete.ModelSelect2(url='edit-autocomplete',
     	attrs={
-	        'data-minimum-input-length': 1,
+	        'data-minimum-input-length': 0,
     	}), required=False)
 	choice_3 = forms.ModelChoiceField(queryset=Object.objects.all(),
 		widget=autocomplete.ModelSelect2(url='edit-autocomplete',
     	attrs={
-	        'data-minimum-input-length': 1,
+	        'data-minimum-input-length': 0,
     	}), required=False)
 	choice_4 = forms.ModelChoiceField(queryset=Object.objects.all(),
 		widget=autocomplete.ModelSelect2(url='edit-autocomplete',
     	attrs={
-	        'data-minimum-input-length': 1,
+	        'data-minimum-input-length': 0,
     	}), required=False)
 	choice_5 = forms.ModelChoiceField(queryset=Object.objects.all(),
 		widget=autocomplete.ModelSelect2(url='edit-autocomplete',
     	attrs={
-	        'data-minimum-input-length': 1,
+	        'data-minimum-input-length': 0,
     	}), required=False)
 
 	def clean(self):
