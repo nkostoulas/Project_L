@@ -9,6 +9,8 @@ from dal import autocomplete
 from social_django.models import UserSocialAuth
 from .models import UserChoiceList, Category, Object
 from .forms import EmailForm, ChoicesForm
+from recommender.views import recommender
+from recommender.models import RecommendationList
 
 # Create your views here.
 def home(request):
@@ -25,7 +27,6 @@ class edit_autocomplete(autocomplete.Select2QuerySetView):
         #something happens with id = 0
         qs = Object.objects.all()
         qs = Object.objects.exclude(pk=0)
-
         qs = qs.filter(category=category)
         
         if self.q:
@@ -69,6 +70,8 @@ def edit(request, category):
             else:
                 list_object = UserChoiceList.create(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5, user=user)
                 list_object.save()
+
+            recommender(request, category)
             return render(request, 'lists/edit_success.html', {'category': list_category})
     else:
         user_list = UserChoiceList.objects.filter(user=user, category=list_category)
@@ -90,6 +93,8 @@ def user_list(request):
         return redirect('email')
 
     user_choices = UserChoiceList.objects.filter(user=request.user.profile)
+    user_recommendations = RecommendationList.objects.filter(user=request.user.profile)
+
     answered_categories = []
     for list in user_choices:
         answered_categories.append(list.category)
@@ -98,7 +103,7 @@ def user_list(request):
 
     all_categories = Category.objects.order_by('name')
 
-    return render(request, 'lists/user_list.html', {'user_choices': user_choices, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories})
+    return render(request, 'lists/user_list.html', {'user_recommendations': user_recommendations, 'user_choices': user_choices, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories})
 
 @login_required
 def email(request):

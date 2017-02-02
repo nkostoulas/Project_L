@@ -47,4 +47,4 @@ class UserChoiceList(models.Model):
         return choice
 
     def __str__(self):
-        return "%s, %s, %s, %s" % (self.user, self.choice_1.category)
+        return "%s, %s" % (self.user, self.choice_1.category)

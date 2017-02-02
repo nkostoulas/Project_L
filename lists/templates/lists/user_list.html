@@ -16,9 +16,6 @@
           <a class="nav-link" href="/user_list">{{ user.first_name }}<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/submit_choice">My Lists</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" href="/logout">logout</a>
         </li>
       {% else %}
@@ -186,16 +183,20 @@
       </div>
 
       <!-- Suggestions -->
+      {% for recommendation in user_recommendations %}
+
       <div class="col-5">
-        <h4>Recommendations for X</h4>
-        <div class="list-group">
-          <p class="list-group-item list-group-item-action">1. -- </p>
-          <p class="list-group-item list-group-item-action">2. -- </p>
-          <p class="list-group-item list-group-item-action">3. -- </p>
-          <p class="list-group-item list-group-item-action">4. -- </p>
-          <p class="list-group-item list-group-item-action">5. -- </p>
-        </div>
+        <h4>Recommendations for {{ recommendation.category.name }}</h4>
+        <ul class="list-group list-group-flush">
+          <a href="{{ recommendation.recommendation_1.url }}" {% if list.choice_1.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">1. {{ recommendation.recommendation_1.name }}</a>
+          <a href="{{ recommendation.recommendation_2.url }}" {% if list.choice_2.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">2. {{ recommendation.recommendation_2.name }}</a>
+          <a href="{{ recommendation.recommendation_3.url }}" {% if list.choice_3.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">3. {{ recommendation.recommendation_3.name }}</a>
+          <a href="{{ recommendation.recommendation_4.url }}" {% if list.choice_4.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">4. {{ recommendation.recommendation_4.name }}</a>
+          <a href="{{ recommendation.recommendation_5.url }}" {% if list.choice_5.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">5. {{ recommendation.recommendation_5.name }}</a>
+        </ul>
       </div>
+
+      {% endfor %}
 
     </div>
   </div>

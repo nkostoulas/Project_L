@@ -1,0 +1,27 @@
+{% extends 'projectl/base.html' %}
+
+{% block content %}
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-3">Project L</h1>
+      <p class="lead">  RECOMMENDER </p>
+    </div>
+  </div>
+
+
+<p class="lead"> Similarity list with other users: </p>
+
+  {% for score in similarity_list %}
+    <p class="lead">  {{ score.0 }} {{ score.1 }}</p>
+  {% endfor %}
+
+<p class="lead"> Recommendations based on other users: </p>
+
+  {% for rec in recommendations %}
+    <p class="lead">  {{ rec }}</p>
+  {% endfor %}
+
+
+
+{% endblock %}

@@ -6,6 +6,7 @@ rm -rf lists/migrations/*
 
 # regenerate migration files and database based on current models
 python manage.py makemigrations lists
+python manage.py makemigrations recommender
 python manage.py migrate
 
 # populate database
