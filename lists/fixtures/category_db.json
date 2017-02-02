@@ -1,38 +1,42 @@
 [
  {
    "model": "lists.Category",
-   "pk": 0,
+   "pk": 1,
    "fields": {
       "name": "Restaurants",
       "description": "Do you live to eat or eat to live?",
-      "image": "category_backgrounds/restaurants.jpg"
-   }
-},
- {
-   "model": "lists.Category",
-   "pk": 1,
-   "fields": {
-      "name": "Cafes",
-      "description": "Find your inner hipster.",
-      "image": "category_backgrounds/cafes.jpg"
+      "image": "category_backgrounds/restaurants.jpg",
+      "nav_url_slug": "restaurants"
    }
 },
  {
    "model": "lists.Category",
    "pk": 2,
    "fields": {
-      "name": "Books",
-      "description": "So many books, so little time.",
-      "image": "category_backgrounds/books.jpg"
+      "name": "Cafes",
+      "description": "Find your inner hipster.",
+      "image": "category_backgrounds/cafes.jpg",
+      "nav_url_slug": "cafes"
    }
 },
  {
    "model": "lists.Category",
    "pk": 3,
    "fields": {
+      "name": "Books",
+      "description": "So many books, so little time.",
+      "image": "category_backgrounds/books.jpg",
+      "nav_url_slug": "books"
+   }
+},
+ {
+   "model": "lists.Category",
+   "pk": 4,
+   "fields": {
       "name": "Video games",
       "description": "Video games ruined my life. Good thing I have two more.",
-      "image": "category_backgrounds/video games.jpg"
+      "image": "category_backgrounds/video games.jpg",
+      "nav_url_slug": "videogames"
    }
 }
 ]

@@ -2,7 +2,9 @@
 
 # delete database and migration files
 rm db.sqlite3
+rm -rf projectl/migrations/*
 rm -rf lists/migrations/*
+rm -rf recommender/migrations/*
 
 # regenerate migration files and database based on current models
 python manage.py makemigrations lists
@@ -12,3 +14,6 @@ python manage.py migrate
 # populate database
 python manage.py loaddata lists/fixtures/category_db.json
 python manage.py loaddata lists/fixtures/object_db.json
+python manage.py loaddata lists/fixtures/user_db.json
+python manage.py loaddata lists/fixtures/userprofile_db.json
+python manage.py loaddata lists/fixtures/userchoicelist_db.json

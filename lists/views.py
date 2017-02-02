@@ -28,7 +28,7 @@ class edit_autocomplete(autocomplete.Select2QuerySetView):
         qs = Object.objects.all()
         qs = Object.objects.exclude(pk=0)
         qs = qs.filter(category=category)
-        
+
         if self.q:
             qs = qs.filter(name__icontains=self.q, category=category)
 
@@ -87,13 +87,31 @@ def edit(request, category):
     return render(request, 'lists/edit.html', {'form': choices_form, 'category': list_category, 'url_reverse': url_reverse})
 
 @login_required
-def user_list(request):
+def user_list(request, category):
+
+    if request.user.email=="":
+        return redirect('email')
+
+    user_choices = UserChoiceList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
+    user_recommendations = RecommendationList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
+
+    if user_choices.count() > 0:
+        unanswered_categories = []
+    else:
+        unanswered_categories = Category.objects.filter(nav_url_slug=category)
+        print(unanswered_categories)
+
+    all_categories = Category.objects.order_by('name')
+
+    return render(request, 'lists/user_list.html', {'user_recommendations': user_recommendations, 'user_choices': user_choices, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories, 'active_nav':category})
+
+@login_required
+def all_categories(request):
 
     if request.user.email=="":
         return redirect('email')
 
     user_choices = UserChoiceList.objects.filter(user=request.user.profile)
-    user_recommendations = RecommendationList.objects.filter(user=request.user.profile)
 
     answered_categories = []
     for list in user_choices:
@@ -103,7 +121,7 @@ def user_list(request):
 
     all_categories = Category.objects.order_by('name')
 
-    return render(request, 'lists/user_list.html', {'user_recommendations': user_recommendations, 'user_choices': user_choices, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories})
+    return render(request, 'lists/all_categories.html', {'user_choices': user_choices, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories, 'active_nav':'all'})
 
 @login_required
 def email(request):

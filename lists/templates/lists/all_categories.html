@@ -1,0 +1,94 @@
+{% extends 'projectl/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="/user_list">Project L</a>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="nav navbar-nav mr-auto">
+      {% if user.is_authenticated %}
+        <li class="nav-item active">
+          <a class="nav-link" href="/user_list">{{ user.first_name }}<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">logout</a>
+        </li>
+      {% else %}
+        <li class="nav-item active">
+          <a class="nav-link" href="/login">Login</a>
+        </li>
+      {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+  <div style="height:50px"></div>
+
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-3">Project L</h1>
+      <p class="lead">Discover more things to like.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Hello, <b> {{ request.user.first_name }}</b>.</h1>
+        <h3>Here are your favourite things:</h3>
+      </div>
+    </div>
+
+    <div style="height:20px"></div>
+
+    <div class="row">
+
+      <!-- Category list -->
+      <div class="col-2">
+    		{% include 'lists/nav_list.html' with all_categories=all_categories active_nav=active_nav %}
+      </div>
+
+      <!-- User Choices -->
+      <div class="col-5">
+        <h4>Answered categories:</h4>
+          {% if user_choices.count < 1 %}
+          <div class="alert alert-warning" role="alert">
+            <strong>Nada!</strong> Fill in some categories below!
+          </div>
+          {% endif %}
+        <!-- Generic category titles -->
+        {% for list in user_choices %}
+        <div class="card">
+          <img class="card-img-top img-fluid" src="{% static list.category.image.url %}" alt="Card image cap">
+          <div class="card-block">
+            <h4 class="card-title">{{ list.category.name }}</h4>
+            <p class="card-text">{{ list.category.description }}</p>
+          </div>
+        </div>
+        <div style="height: 20px"></div>
+        {% endfor %}
+      </div>
+
+      <div class="col-5">
+        <h4>Unanswered categories:</h4>
+        {% for category in unanswered_categories %}
+        <div class="card">
+          <img class="card-img-top img-fluid" src="{% static category.image.url %}" alt="Card image cap">
+          <div class="card-block">
+            <h4 class="card-title">{{ category.name }}</h4>
+            <p class="card-text">{{ category.description }}</p>
+          </div>
+        </div>
+        <div style="height: 20px"></div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}

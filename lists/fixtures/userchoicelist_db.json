@@ -1,0 +1,67 @@
+[
+ {
+   "model": "lists.UserChoiceList",
+   "pk": 0,
+   "fields": {
+      "user": 0,
+      "category": 1,
+      "choice_1": 1,
+      "choice_2": 2,
+      "choice_3": 3,
+      "choice_4": 4,
+      "choice_5": 5
+   }
+},
+ {
+   "model": "lists.UserChoiceList",
+   "pk": 1,
+   "fields": {
+      "user": 1,
+      "category": 1,
+      "choice_1": 1,
+      "choice_2": 2,
+      "choice_3": 6,
+      "choice_4": 7,
+      "choice_5": 8
+   }
+},
+ {
+   "model": "lists.UserChoiceList",
+   "pk": 2,
+   "fields": {
+      "user": 2,
+      "category": 1,
+      "choice_1": 1,
+      "choice_2": 2,
+      "choice_3": 6,
+      "choice_4": 7,
+      "choice_5": 9
+   }
+},
+ {
+   "model": "lists.UserChoiceList",
+   "pk": 3,
+   "fields": {
+      "user": 3,
+      "category": 1,
+      "choice_1": 2,
+      "choice_2": 3,
+      "choice_3": 5,
+      "choice_4": null,
+      "choice_5": null
+   }
+},
+ {
+   "model": "lists.UserChoiceList",
+   "pk": 4,
+   "fields": {
+      "user": 4,
+      "category": 1,
+      "choice_1": 2,
+      "choice_2": 4,
+      "choice_3": 9,
+      "choice_4": null,
+      "choice_5": null
+   }
+}
+]

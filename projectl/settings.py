@@ -148,7 +148,7 @@ SOCIAL_AUTH_PIPELINE = (
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'user_list'
+LOGIN_REDIRECT_URL = 'all_categories'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
