@@ -24,11 +24,26 @@ def recommender(request, category):
 	# Recommendations based on similarity scores	
 	recommendations = choose_recommendations(user_list, other_user_lists, similarity_list_sorted)
 
-	rec_1 = Object.objects.get(name=recommendations[0])
-	rec_2 = Object.objects.get(name=recommendations[1])
-	rec_3 = Object.objects.get(name=recommendations[2])
-	rec_4 = Object.objects.get(name=recommendations[3])
-	rec_5 = Object.objects.get(name=recommendations[4])
+	try:
+		rec_1 = Object.objects.get(name=recommendations[0])
+	except:
+		rec_1 = None
+	try:
+		rec_2 = Object.objects.get(name=recommendations[1])
+	except:
+		rec_2 = None
+	try:
+		rec_3 = Object.objects.get(name=recommendations[2])
+	except:
+		rec_3 = None
+	try:
+		rec_4 = Object.objects.get(name=recommendations[3])
+	except:
+		rec_4 = None
+	try:
+		rec_5 = Object.objects.get(name=recommendations[4])
+	except:
+		rec_5 = None
 	
 	user_recommendations = RecommendationList.objects.filter(user=user.profile, category=category)
 
@@ -39,7 +54,6 @@ def recommender(request, category):
 		recommendation_object.save()
 
 	return None
-	#return render(request, 'recommender/recommender.html', {'similarity_list': similarity_list_sorted, 'recommendations': recommendations})
 
 def calculate_similarity(user_list, other_list):
 	similarity = 0
@@ -67,7 +81,6 @@ def choose_recommendations(user_list, other_user_lists, similarity_list):
 		other_list = get_user_list(other_user_lists.get(user=UserProfile.objects.get(user=User.objects.get(username=other_user))))
 		
 		for choice in other_list: 
-			print(choice)
 			if choice not in user_list and choice != "" and choice not in recommendations :
 				recommendations.append(choice)
 				no_recommendations -= 1

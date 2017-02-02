@@ -99,7 +99,6 @@ def user_list(request, category):
         unanswered_categories = []
     else:
         unanswered_categories = Category.objects.filter(nav_url_slug=category)
-        print(unanswered_categories)
 
     all_categories = Category.objects.order_by('name')
 
@@ -131,7 +130,7 @@ def email(request):
             user = request.user
             user.email = form.cleaned_data['email']
             user.save()
-            return redirect('user_list')
+            return redirect('all_categories')
     else:
         form = EmailForm()
     return render(request, 'projectl/email.html', {'form': form})
