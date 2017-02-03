@@ -150,7 +150,7 @@
       <div class="col-5">
         <h4>Recommendations for {{ recommendation.category.name }}:</h4>
         <ul class="list-group list-group-flush">
-          <a href="{{ recommendation.recommendation_1.url }}" {% if recommendation.recommendation_1.url  %}target="_blank"{% endif %} class="list-group-item list-group-item-action">1. {{ recommendation.recommendation_1.name }}</a>
+          <li class="list-group-item list-group-item-action"><a href="{{ recommendation.recommendation_1.url }}" {% if recommendation.recommendation_1.url  %}target="_blank"{% endif %}>1. {{ recommendation.recommendation_1.name }}</a><a href="/add_like/{{ recommendation.recommendation_1.pk }}"><i class="fa fa-heart" aria-hidden="true" style="padding-left:20px"></i></a><a href="/add_dislike/{{ recommendation.recommendation_1.pk }}"><i class="fa fa-close" aria-hidden="true" style="padding-left:10px"></i></a></li>
           <a href="{{ recommendation.recommendation_2.url }}" {% if recommendation.recommendation_2.url  %}target="_blank"{% endif %} class="list-group-item list-group-item-action">2. {{ recommendation.recommendation_2.name }}</a>
           <a href="{{ recommendation.recommendation_3.url }}" {% if recommendation.recommendation_3.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">3. {{ recommendation.recommendation_3.name }}</a>
           <a href="{{ recommendation.recommendation_4.url }}" {% if recommendation.recommendation_4.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">4. {{ recommendation.recommendation_4.name }}</a>
@@ -159,6 +159,25 @@
       </div>
 
       {% endfor %}
+
+      <div class="col-5">
+        <h4>User likes for {{ like.category.name }}:</h4>
+        {% for like in user_likes %}
+          <ul class="list-group list-group-flush">
+            <a href="{{ like.object.url }}" {% if like.object.url  %}target="_blank"{% endif %} class="list-group-item list-group-item-action">{{ like.object.name }}</a>
+          </ul>
+        {% endfor %}
+      </div>
+
+      <div class="col-5">
+        <h4>User dislikes for {{ dislike.category.name }}:</h4>
+        {% for dislike in user_dislikes %}
+          <ul class="list-group list-group-flush">
+            <a href="{{ dislike.object.url }}" {% if dislike.object.url  %}target="_blank"{% endif %} class="list-group-item list-group-item-action">{{ dislike.object.name }}</a>
+          </ul>
+        {% endfor %}
+      </div>
+
 
     </div>
   </div>

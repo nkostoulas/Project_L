@@ -10,7 +10,7 @@ from social_django.models import UserSocialAuth
 from .models import UserChoiceList, Category, Object
 from .forms import EmailForm, ChoicesForm
 from recommender.views import recommender
-from recommender.models import RecommendationList
+from recommender.models import RecommendationList, UserLikeList, UserDislikeList
 
 # Create your views here.
 def home(request):
@@ -94,6 +94,9 @@ def user_list(request, category):
 
     user_choices = UserChoiceList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
     user_recommendations = RecommendationList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
+    category_name = Category.objects.get(nav_url_slug=category).name
+    user_likes = UserLikeList.objects.filter(user=request.user.profile, category=category_name)
+    user_dislikes = UserDislikeList.objects.filter(user=request.user.profile, category=category_name)
 
     if user_choices.count() > 0:
         unanswered_categories = []
@@ -102,7 +105,7 @@ def user_list(request, category):
 
     all_categories = Category.objects.order_by('name')
 
-    return render(request, 'lists/user_list.html', {'user_recommendations': user_recommendations, 'user_choices': user_choices, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories, 'active_nav':category})
+    return render(request, 'lists/user_list.html', {'user_likes': user_likes, 'user_dislikes': user_dislikes, 'user_recommendations': user_recommendations, 'user_choices': user_choices, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories, 'active_nav':category})
 
 @login_required
 def all_categories(request):
