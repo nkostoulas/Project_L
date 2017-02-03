@@ -14,9 +14,35 @@ class RecommendationList(models.Model):
 
     @classmethod
     def create(cls, recommendation_1, recommendation_2, recommendation_3, recommendation_4, recommendation_5, user):
-        recommendations = cls(recommendation_1=recommendation_1, recommendation_2=recommendation_2, recommendation_3=recommendation_3, 
+        recommendations = cls(recommendation_1=recommendation_1, recommendation_2=recommendation_2, recommendation_3=recommendation_3,
         			recommendation_4=recommendation_4, recommendation_5=recommendation_5, user=user, category=recommendation_1.category)
         return recommendations
 
     def __str__(self):
         return "%s, %s" % (self.user, self.recommendation_1.category)
+
+class UserLikeList(models.Model):
+    object = models.ForeignKey(Object, on_delete = models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete = models.CASCADE)
+    category = models.CharField(max_length=200)
+
+    @classmethod
+    def create(cls, object, user):
+        object = cls(object=object, user=user, category=object.category.name)
+        return object
+
+    def __str__(self):
+        return "%s, %s, %s" % (self.user, self.object, self.category)
+
+class UserDislikeList(models.Model):
+    object = models.ForeignKey(Object, on_delete = models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete = models.CASCADE)
+    category = models.CharField(max_length=200)
+
+    @classmethod
+    def create(cls, object, user):
+        object = cls(object=object, user=user, category=object.category.name)
+        return object
+
+    def __str__(self):
+        return "%s, %s, %s" % (self.user, self.object, self.category)

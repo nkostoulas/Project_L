@@ -143,6 +143,35 @@
           </script>
 
         {% endfor %}
+
+        {% for list in user_choices %}
+
+        {% if user_likes.count > 0 %}
+          <div style="height:20px"></div>
+          <div class="card">
+            <h4 class="card-header">Other {{ list.category.name }} you like:</h4>
+            <ul class="list-group list-group-flush">
+              {% for like in user_likes %}
+                <a href="{{ like.object.url }}" {% if like.object.url  %}target="_blank"{% endif %} class="list-group-item list-group-item-action">{{ like.object.name }}</a>
+              {% endfor %}
+           </ul>
+          </div>
+        {% endif %}
+
+        {% if user_dislikes.count > 0 %}
+          <div style="height:20px"></div>
+          <div class="card">
+            <h4 class="card-header">{{ list.category.name }} you dislike:</h4>
+            <ul class="list-group list-group-flush">
+              {% for dislike in user_dislikes %}
+                <a href="{{ dislike.object.url }}" {% if dislike.object.url  %}target="_blank"{% endif %} class="list-group-item list-group-item-action">{{ dislike.object.name }}</a>
+              {% endfor %}
+           </ul>
+          </div>
+        {% endif %}
+
+        {% endfor %}
+
       </div>
 
       <!-- Suggestions -->
@@ -151,11 +180,11 @@
         {% for recommendation in user_recommendations %}
           <h4>Recommendations for {{ recommendation.category.name }}:</h4>
           <ul class="list-group list-group-flush">
-            <a href="{{ recommendation.recommendation_1.url }}" {% if recommendation.recommendation_1.url  %}target="_blank"{% endif %} class="list-group-item list-group-item-action">1. {{ recommendation.recommendation_1.name }}</a>
-            <a href="{{ recommendation.recommendation_2.url }}" {% if recommendation.recommendation_2.url  %}target="_blank"{% endif %} class="list-group-item list-group-item-action">2. {{ recommendation.recommendation_2.name }}</a>
-            <a href="{{ recommendation.recommendation_3.url }}" {% if recommendation.recommendation_3.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">3. {{ recommendation.recommendation_3.name }}</a>
-            <a href="{{ recommendation.recommendation_4.url }}" {% if recommendation.recommendation_4.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">4. {{ recommendation.recommendation_4.name }}</a>
-            <a href="{{ recommendation.recommendation_5.url }}" {% if recommendation.recommendation_5.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">5. {{ recommendation.recommendation_5.name }}</a>
+            <li class="list-group-item list-group-item-action"><a href="{{ recommendation.recommendation_1.url }}" {% if recommendation.recommendation_1.url  %}target="_blank"{% endif %}>1. {{ recommendation.recommendation_1.name }}</a><a href="/add_like/{{ recommendation.recommendation_1.pk }}"><i class="fa fa-heart" aria-hidden="true" style="padding-left:20px"></i></a><a href="/add_dislike/{{ recommendation.recommendation_1.pk }}"><i class="fa fa-close" aria-hidden="true" style="padding-left:10px"></i></a></li>
+            <li class="list-group-item list-group-item-action"><a href="{{ recommendation.recommendation_2.url }}" {% if recommendation.recommendation_2.url  %}target="_blank"{% endif %}>2. {{ recommendation.recommendation_2.name }}</a><a href="/add_like/{{ recommendation.recommendation_2.pk }}"><i class="fa fa-heart" aria-hidden="true" style="padding-left:20px"></i></a><a href="/add_dislike/{{ recommendation.recommendation_2.pk }}"><i class="fa fa-close" aria-hidden="true" style="padding-left:10px"></i></a></li>
+            <li class="list-group-item list-group-item-action"><a href="{{ recommendation.recommendation_3.url }}" {% if recommendation.recommendation_3.url  %}target="_blank"{% endif %}>3. {{ recommendation.recommendation_3.name }}</a><a href="/add_like/{{ recommendation.recommendation_3.pk }}"><i class="fa fa-heart" aria-hidden="true" style="padding-left:20px"></i></a><a href="/add_dislike/{{ recommendation.recommendation_3.pk }}"><i class="fa fa-close" aria-hidden="true" style="padding-left:10px"></i></a></li>
+            <li class="list-group-item list-group-item-action"><a href="{{ recommendation.recommendation_4.url }}" {% if recommendation.recommendation_4.url  %}target="_blank"{% endif %}>4. {{ recommendation.recommendation_4.name }}</a><a href="/add_like/{{ recommendation.recommendation_4.pk }}"><i class="fa fa-heart" aria-hidden="true" style="padding-left:20px"></i></a><a href="/add_dislike/{{ recommendation.recommendation_4.pk }}"><i class="fa fa-close" aria-hidden="true" style="padding-left:10px"></i></a></li>
+            <li class="list-group-item list-group-item-action"><a href="{{ recommendation.recommendation_5.url }}" {% if recommendation.recommendation_5.url  %}target="_blank"{% endif %}>5. {{ recommendation.recommendation_5.name }}</a><a href="/add_like/{{ recommendation.recommendation_5.pk }}"><i class="fa fa-heart" aria-hidden="true" style="padding-left:20px"></i></a><a href="/add_dislike/{{ recommendation.recommendation_5.pk }}"><i class="fa fa-close" aria-hidden="true" style="padding-left:10px"></i></a></li>
           </ul>
         {% endfor %}
       {% else %}
@@ -164,7 +193,6 @@
         </div>
       {% endif %}
       </div>
-
     </div>
   </div>
 
