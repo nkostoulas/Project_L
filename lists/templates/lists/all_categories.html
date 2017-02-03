@@ -29,10 +29,11 @@
 
   <div style="height:50px"></div>
 
-  <div class="jumbotron jumbotron-fluid">
+  <div class="jumbotron jumbotron-fluid default-background">
     <div class="container">
-      <h1 class="display-3">Project L</h1>
-      <p class="lead">Discover more things to like.</p>
+      <h1 class="display-1">Project L</h1>
+      <div style="height:10px"></div>
+      <h2>Discover more things to like.</h2>
     </div>
   </div>
 
@@ -40,7 +41,13 @@
     <div class="row">
       <div class="col-md-12">
         <h1>Hello, <b> {{ request.user.first_name }}</b>.</h1>
-        <h3>Here are your favourite things:</h3>
+        {% if user_choices.count < 1 %}
+          <h3>Get started by filling in some of the categories below:</h3>
+        {% elif unanswered_categories.count > 1 %}
+          <h3>Fancy discovering more things you like? Fill in another category from below:</h3>
+        {% else %}
+          <h3>Well done you, you've filled in all our categories! Keep checking back for more categories in the future, and for new recommendations.</h3>
+        {% endif %}
       </div>
     </div>
 
@@ -90,5 +97,7 @@
 
     </div>
   </div>
+
+  <div style="height:100px"></div>
 
 {% endblock %}

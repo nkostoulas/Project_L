@@ -18,6 +18,24 @@ body {
   background-color: #f5f5f5;
 }
 
+.home-background {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+		url("/static/img/home-background.jpg");
+  height: 100vh;
+  width: auto%;
+	position: relative;
+	background-size: cover;
+  color: white;
+}
+
+.default-background {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)),
+		url("/static/img/default-background.jpg");
+	width: 100%;
+	position: relative;
+	background-size: cover;
+  color: white;
+}
 
 /* Custom page CSS
 -------------------------------------------------- */

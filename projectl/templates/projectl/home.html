@@ -18,20 +18,18 @@
 
   <div style="height:50px"></div>
 
-  <div class="jumbotron jumbotron-fluid">
+  <div class="jumbotron jumbotron-fluid home-background">
     <div class="container">
-      <h1 class="display-3">Project L</h1>
-      <p class="lead">Discover more things to like.</p>
+      <h1 class="display-1">Project L</h1>
+      <div style="height:10px"></div>
+      <h2>Discover more things to like.</h2>
+      <hr class="my-4">
+      <p>Tell us your 5 favourite things for any category and we'll suggest other things you'll probably like.</p>
+      <p>Powered by A.I.</p>
+      <p class="lead">
+        <a class="btn btn-primary btn-lg" href="{% url 'social:begin' 'facebook' %}" role="button">Get started now!</a>
+      </p>
     </div>
   </div>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <p>Home Page</p>
-      </div>
-    </div>
-
-    </div>
 
 {% endblock %}

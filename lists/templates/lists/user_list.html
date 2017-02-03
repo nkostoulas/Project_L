@@ -29,10 +29,11 @@
 
   <div style="height:50px"></div>
 
-  <div class="jumbotron jumbotron-fluid">
+  <div class="jumbotron jumbotron-fluid default-background">
     <div class="container">
-      <h1 class="display-3">Project L</h1>
-      <p class="lead">Discover more things to like.</p>
+      <h1 class="display-1">Project L</h1>
+      <div style="height:10px"></div>
+      <h2>Discover more things to like.</h2>
     </div>
   </div>
 
@@ -145,22 +146,28 @@
       </div>
 
       <!-- Suggestions -->
-      {% for recommendation in user_recommendations %}
-
       <div class="col-5">
-        <h4>Recommendations for {{ recommendation.category.name }}:</h4>
-        <ul class="list-group list-group-flush">
-          <a href="{{ recommendation.recommendation_1.url }}" {% if recommendation.recommendation_1.url  %}target="_blank"{% endif %} class="list-group-item list-group-item-action">1. {{ recommendation.recommendation_1.name }}</a>
-          <a href="{{ recommendation.recommendation_2.url }}" {% if recommendation.recommendation_2.url  %}target="_blank"{% endif %} class="list-group-item list-group-item-action">2. {{ recommendation.recommendation_2.name }}</a>
-          <a href="{{ recommendation.recommendation_3.url }}" {% if recommendation.recommendation_3.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">3. {{ recommendation.recommendation_3.name }}</a>
-          <a href="{{ recommendation.recommendation_4.url }}" {% if recommendation.recommendation_4.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">4. {{ recommendation.recommendation_4.name }}</a>
-          <a href="{{ recommendation.recommendation_5.url }}" {% if recommendation.recommendation_5.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">5. {{ recommendation.recommendation_5.name }}</a>
-        </ul>
+      {% if user_recommendations.count > 0 %}
+        {% for recommendation in user_recommendations %}
+          <h4>Recommendations for {{ recommendation.category.name }}:</h4>
+          <ul class="list-group list-group-flush">
+            <a href="{{ recommendation.recommendation_1.url }}" {% if recommendation.recommendation_1.url  %}target="_blank"{% endif %} class="list-group-item list-group-item-action">1. {{ recommendation.recommendation_1.name }}</a>
+            <a href="{{ recommendation.recommendation_2.url }}" {% if recommendation.recommendation_2.url  %}target="_blank"{% endif %} class="list-group-item list-group-item-action">2. {{ recommendation.recommendation_2.name }}</a>
+            <a href="{{ recommendation.recommendation_3.url }}" {% if recommendation.recommendation_3.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">3. {{ recommendation.recommendation_3.name }}</a>
+            <a href="{{ recommendation.recommendation_4.url }}" {% if recommendation.recommendation_4.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">4. {{ recommendation.recommendation_4.name }}</a>
+            <a href="{{ recommendation.recommendation_5.url }}" {% if recommendation.recommendation_5.url %}target="_blank"{% endif %} class="list-group-item list-group-item-action">5. {{ recommendation.recommendation_5.name }}</a>
+          </ul>
+        {% endfor %}
+      {% else %}
+        <div class="alert alert-warning" role="alert">
+          <strong>We need to know you better first!</strong> Tell us what you like and we'll give you some recommendations.
+        </div>
+      {% endif %}
       </div>
-
-      {% endfor %}
 
     </div>
   </div>
+
+  <div style="height:100px"></div>
 
 {% endblock %}
