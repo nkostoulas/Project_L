@@ -68,7 +68,7 @@ def edit(request, category):
             if user_list.count() > 0:
                 user_list.update(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5)
             else:
-                list_object = UserChoiceList.create(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5, user=user)
+                list_object = UserChoiceList.create(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5, user=user, category=list_category)
                 list_object.save()
 
             recommender(request, category)
@@ -94,9 +94,8 @@ def user_list(request, category):
 
     user_choices = UserChoiceList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
     user_recommendations = RecommendationList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
-    category_name = Category.objects.get(nav_url_slug=category).name
-    user_likes = UserLikeList.objects.filter(user=request.user.profile, category=category_name)
-    user_dislikes = UserDislikeList.objects.filter(user=request.user.profile, category=category_name)
+    user_likes = UserLikeList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
+    user_dislikes = UserDislikeList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
 
     if user_choices.count() > 0:
         unanswered_categories = []

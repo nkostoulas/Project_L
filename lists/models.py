@@ -42,10 +42,10 @@ class UserChoiceList(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     @classmethod
-    def create(cls, choice_1, choice_2, choice_3, choice_4, choice_5, user):
+    def create(cls, choice_1, choice_2, choice_3, choice_4, choice_5, user, category):
         choice = cls(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5,
-                     user=user, category=choice_1.category)
+                     user=user, category=category)
         return choice
 
     def __str__(self):
-        return "%s, %s" % (self.user, self.choice_1.category)
+        return "%s, %s" % (self.user, self.category)

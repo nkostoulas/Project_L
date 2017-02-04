@@ -13,7 +13,7 @@ def add_like(request, object):
 	like = Object.objects.get(pk=object)
 	like_list = UserLikeList.objects.filter(object=like, user=user)
 	if like_list.count() == 0:
-		like_object = UserLikeList.create(object=like, user=user)
+		like_object = UserLikeList.create(object=like, user=user, category=like.category)
 		like_object.save()
 
 	recommender(request, like.category.pk)
@@ -26,7 +26,7 @@ def add_dislike(request, object):
 	dislike = Object.objects.get(pk=object)
 	dislike_list = UserDislikeList.objects.filter(object=dislike, user=user)
 	if dislike_list.count() == 0:
-		dislike_object = UserDislikeList.create(object=dislike, user=user)
+		dislike_object = UserDislikeList.create(object=dislike, user=user, category=dislike.category)
 		dislike_object.save()
 
 	recommender(request, dislike.category.pk)
@@ -37,11 +37,9 @@ def add_dislike(request, object):
 def recommender(request, category):
 
 	user = request.user
-	category_name = Category.objects.get(pk=category).name
 	user_list = get_user_choices(UserChoiceList.objects.get(user = user.profile, category=category))
-	user_like_list = get_user_list(UserLikeList.objects.filter(user=user.profile, category=category_name))
-	user_dislike_list = get_user_list(UserDislikeList.objects.filter(user=user.profile, category=category_name))
-
+	user_like_list = get_user_list(UserLikeList.objects.filter(user=user.profile, category=category))
+	user_dislike_list = get_user_list(UserDislikeList.objects.filter(user=user.profile, category=category))
 	other_user_lists = UserChoiceList.objects.filter(category=category).exclude(user = user.profile)
 	similarity_list = {}
 
@@ -79,11 +77,12 @@ def recommender(request, category):
 		rec_5 = None
 
 	user_recommendations = RecommendationList.objects.filter(user=user.profile, category=category)
+	category_object = Category.objects.get(pk=category)
 
 	if user_recommendations.count() > 0:
 		user_recommendations.update(recommendation_1=rec_1, recommendation_2=rec_2, recommendation_3=rec_3, recommendation_4=rec_4, recommendation_5=rec_5)
 	else:
-		recommendation_object = RecommendationList.create(recommendation_1=rec_1, recommendation_2=rec_2, recommendation_3=rec_3, recommendation_4=rec_4, recommendation_5=rec_5, user=user.profile)
+		recommendation_object = RecommendationList.create(recommendation_1=rec_1, recommendation_2=rec_2, recommendation_3=rec_3, recommendation_4=rec_4, recommendation_5=rec_5, user=user.profile, category=category_object)
 		recommendation_object.save()
 
 	return None
@@ -128,7 +127,6 @@ def get_user_list(user_objects):
 	return user_list
 
 def get_user_choices(user_list):
-
 	if user_list.choice_1 == None:
 		choice_1 = ""
 	else:

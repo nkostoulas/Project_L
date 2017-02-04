@@ -13,22 +13,22 @@ class RecommendationList(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     @classmethod
-    def create(cls, recommendation_1, recommendation_2, recommendation_3, recommendation_4, recommendation_5, user):
+    def create(cls, recommendation_1, recommendation_2, recommendation_3, recommendation_4, recommendation_5, user, category):
         recommendations = cls(recommendation_1=recommendation_1, recommendation_2=recommendation_2, recommendation_3=recommendation_3,
-        			recommendation_4=recommendation_4, recommendation_5=recommendation_5, user=user, category=recommendation_1.category)
+        			recommendation_4=recommendation_4, recommendation_5=recommendation_5, user=user, category=category)
         return recommendations
 
     def __str__(self):
-        return "%s, %s" % (self.user, self.recommendation_1.category)
+        return "%s, %s" % (self.user, self.category)
 
 class UserLikeList(models.Model):
     object = models.ForeignKey(Object, on_delete = models.CASCADE)
     user = models.ForeignKey(UserProfile, on_delete = models.CASCADE)
-    category = models.CharField(max_length=200)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     @classmethod
-    def create(cls, object, user):
-        object = cls(object=object, user=user, category=object.category.name)
+    def create(cls, object, user, category):
+        object = cls(object=object, user=user, category=category)
         return object
 
     def __str__(self):
@@ -37,11 +37,11 @@ class UserLikeList(models.Model):
 class UserDislikeList(models.Model):
     object = models.ForeignKey(Object, on_delete = models.CASCADE)
     user = models.ForeignKey(UserProfile, on_delete = models.CASCADE)
-    category = models.CharField(max_length=200)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     @classmethod
-    def create(cls, object, user):
-        object = cls(object=object, user=user, category=object.category.name)
+    def create(cls, object, user, category):
+        object = cls(object=object, user=user, category=category)
         return object
 
     def __str__(self):
