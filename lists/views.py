@@ -64,12 +64,24 @@ def edit(request, category):
             except:
                 choice_5 = None
 
+            # Add choices to user top5 choice list
             user_list = UserChoiceList.objects.filter(user=user, category=list_category)
             if user_list.count() > 0:
                 user_list.update(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5)
             else:
-                list_object = UserChoiceList.create(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5, user=user, category=list_category)
-                list_object.save()
+                choice_object = UserChoiceList.create(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5, user=user, category=list_category)
+                choice_object.save()
+
+            # Also add choices to user like list if they don't exist already and delete from user dislike list
+            choices = [choice_1, choice_2, choice_3, choice_4, choice_5]
+            for choice in choices:
+                if choice is not None:
+                    if UserLikeList.objects.filter(user=user, object=choice).count() == 0:
+                        like_object = UserLikeList.create(object=choice, user=user, category=list_category)
+                        like_object.save()
+                    dislike_object = UserDislikeList.objects.filter(user=user, object=choice)
+                    if dislike_object.count() != 0:
+                        dislike_object.delete()
 
             recommender(request, category)
             return render(request, 'lists/edit_success.html', {'category': list_category})
@@ -94,13 +106,15 @@ def user_list(request, category):
 
     user_choices = UserChoiceList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
     user_recommendations = RecommendationList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
-    user_likes = UserLikeList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
+
     user_dislikes = UserDislikeList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
 
     if user_choices.count() > 0:
         unanswered_categories = []
+        user_likes = UserLikeList.objects.filter(user=request.user.profile, category__nav_url_slug=category).exclude(object__in=get_user_choices(user_choices.first()))   #exclude doesnt work with lists that have None objects
     else:
         unanswered_categories = Category.objects.filter(nav_url_slug=category)
+        user_likes = UserLikeList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
 
     all_categories = Category.objects.order_by('name')
 
@@ -123,6 +137,21 @@ def all_categories(request):
     all_categories = Category.objects.order_by('name')
 
     return render(request, 'lists/all_categories.html', {'user_choices': user_choices, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories, 'active_nav':'all'})
+
+def get_user_choices(user_list):
+    user_choices = []
+    if user_list.choice_1 != None:
+        user_choices.append(user_list.choice_1)
+    if user_list.choice_2 != None:
+        user_choices.append(user_list.choice_2)
+    if user_list.choice_3 != None:
+        user_choices.append(user_list.choice_3)
+    if user_list.choice_4 != None:
+        user_choices.append(user_list.choice_4)
+    if user_list.choice_5 != None:
+        user_choices.append(user_list.choice_5)
+
+    return user_choices
 
 @login_required
 def email(request):
