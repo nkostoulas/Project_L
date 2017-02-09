@@ -17,6 +17,7 @@ class Object(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField()
     url = models.URLField(max_length=200, blank=True)
+    image = models.ImageField(upload_to='img/objectimages/' , blank=True)
 
     def __str__(self):
         return self.name

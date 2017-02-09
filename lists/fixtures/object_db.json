@@ -6,7 +6,8 @@
       "name": "Barrafina",
       "category": 1,
       "description": "A bustling, Barcelona-style tapas restaurant and the original small-plates-and-no-reservations counter bar pioneer. ",
-      "url": "http://www.barrafina.co.uk/"
+      "url": "http://www.barrafina.co.uk/",
+      "image": "img/objectimages/1.jpg"
    }
 },
  {
@@ -16,7 +17,8 @@
       "name": "Counter Culture",
       "category": 1,
       "description": "A casual, creative and cool joint in Clapham - on a sunny day, the alfresco tables are a prime people-watching location.",
-      "url": "http://www.countercultureclapham.co.uk/"
+      "url": "http://www.countercultureclapham.co.uk/",
+      "image": "img/objectimages/2.jpg"
    }
 },
  {
@@ -26,7 +28,8 @@
       "name": "The Barbary",
       "category": 1,
       "description": "A ‘modern Israeli’ small plates restaurant in the heart of Neal’s Yard, Covent Garden. ",
-      "url": "http://thebarbary.co.uk/"
+      "url": "http://thebarbary.co.uk/",
+      "image": "img/objectimages/3.jpg"
    }
 },
  {
@@ -36,7 +39,8 @@
       "name": "Som Saa",
       "category": 1,
       "description": "Thai street food in a stylish and exotic former garment factory walking distance from Liverpool Street.",
-      "url": "http://www.somsaa.com/"
+      "url": "http://www.somsaa.com/",
+      "image": "img/objectimages/4.jpg"
    }
 },
  {
@@ -46,7 +50,8 @@
       "name": "Hoppers",
       "category": 1,
       "description": "A restaurant serving exclusively Sri Lankan dishes in the heart of Soho.",
-      "url": "https://www.hopperslondon.com/"
+      "url": "https://www.hopperslondon.com/",
+      "image": "img/objectimages/5.jpg"
    }
 },
  {
@@ -56,7 +61,8 @@
       "name": "Ceviche Soho",
       "category": 1,
       "description": "A Latin dance party on your plate and in your glass!",
-      "url": "http://www.cevicheuk.com/soho"
+      "url": "http://www.cevicheuk.com/soho",
+      "image": "img/objectimages/6.jpg"
    }
 },
  {
@@ -66,7 +72,8 @@
       "name": "Bao",
       "category": 1,
       "description": "A dinky Soho eatery serving fiery food you can eat with your fingers – and have time to queue.",
-      "url": "https://baolondon.com/"
+      "url": "https://baolondon.com/",
+      "image": "img/objectimages/7.jpg"
    }
 },
  {
@@ -76,7 +83,8 @@
       "name": "Rök Smokehouse and Bar",
       "category": 1,
       "description": "A hip destination for thise who don’t want to have to compromise on food, cocktails, ambience or service.",
-      "url": "http://roklondon.co.uk/"
+      "url": "http://roklondon.co.uk/",
+      "image": "img/objectimages/8.jpg"
    }
 },
  {
@@ -86,7 +94,8 @@
       "name": "Social Eating House",
       "category": 1,
       "description": "Informal but slick service and a big-ticket menu from Ramsay protégé and unstoppable wunderkind Jason Atherton. ",
-      "url": "http://www.socialeatinghouse.com/"
+      "url": "http://www.socialeatinghouse.com/",
+      "image": "img/objectimages/9.jpg"
    }
 },
  {
@@ -96,7 +105,8 @@
       "name": "Roka",
       "category": 1,
       "description": "It’s a popular spot for media schmoozing, but also suited to a special occasion when you don’t mind parting with a fair few pennies.",
-      "url": "https://www.rokarestaurant.com/"
+      "url": "https://www.rokarestaurant.com/",
+      "image": "img/objectimages/10.jpg"
    }
 }
 ]
