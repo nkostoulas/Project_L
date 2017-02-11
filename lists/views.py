@@ -1,13 +1,8 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm, UserCreationForm
-from django.contrib.auth.models import User
-from django.contrib.auth import update_session_auth_hash, login, authenticate
-from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from dal import autocomplete
-from social_django.models import UserSocialAuth
-from .models import UserChoiceList, Category, Object
+from .models import UserTopList, Category, Object
 from .forms import EmailForm, ChoicesForm
 from recommender.views import recommender
 from recommender.models import RecommendationList, UserLikeList, UserDislikeList
@@ -25,9 +20,7 @@ class edit_autocomplete(autocomplete.Select2QuerySetView):
         category = Category.objects.get(pk=self.request.session['category'])
 
         #something happens with id = 0
-        qs = Object.objects.all()
-        qs = Object.objects.exclude(pk=0)
-        qs = qs.filter(category=category)
+        qs = Object.objects.all().exclude(pk=0).filter(category=category)
 
         if self.q:
             qs = qs.filter(name__icontains=self.q, category=category)
@@ -43,56 +36,59 @@ def edit(request, category):
     if request.method == 'POST':
         choices_form = ChoicesForm(request.POST)
         if choices_form.is_valid():
+            choices = []
             try:
-                choice_1 = Object.objects.get(name=choices_form.cleaned_data['choice_1'])
+                choices.append(Object.objects.get(name=choices_form.cleaned_data['choice_1']))
             except:
-                choice_1 = None
+                pass
             try:
-                choice_2 = Object.objects.get(name=choices_form.cleaned_data['choice_2'])
+                choices.append(Object.objects.get(name=choices_form.cleaned_data['choice_2']))
             except:
-                choice_2 = None
+                pass
             try:
-                choice_3 = Object.objects.get(name=choices_form.cleaned_data['choice_3'])
+                choices.append(Object.objects.get(name=choices_form.cleaned_data['choice_3']))
             except:
-                choice_3 = None
+                pass
             try:
-                choice_4 = Object.objects.get(name=choices_form.cleaned_data['choice_4'])
+                choices.append(Object.objects.get(name=choices_form.cleaned_data['choice_4']))
             except:
-                choice_4 = None
+                pass
             try:
-                choice_5 = Object.objects.get(name=choices_form.cleaned_data['choice_5'])
+                choices.append(Object.objects.get(name=choices_form.cleaned_data['choice_5']))
             except:
-                choice_5 = None
+                pass
 
-            # Add choices to user top5 choice list
-            user_list = UserChoiceList.objects.filter(user=user, category=list_category)
-            if user_list.count() > 0:
-                user_list.update(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5)
-            else:
-                choice_object = UserChoiceList.create(choice_1=choice_1, choice_2=choice_2, choice_3=choice_3, choice_4=choice_4, choice_5=choice_5, user=user, category=list_category)
-                choice_object.save()
+            # Delete previous Top List
+            prev_top_list = UserTopList.objects.filter(user=user, category=list_category).delete()
 
-            # Also add choices to user like list if they don't exist already and delete from user dislike list
-            choices = [choice_1, choice_2, choice_3, choice_4, choice_5]
+            # Add new Top List
+            # Also add Top choice to Like List and/or delete from Dislike List
             for choice in choices:
-                if choice is not None:
-                    if UserLikeList.objects.filter(user=user, object=choice).count() == 0:
-                        like_object = UserLikeList.create(object=choice, user=user, category=list_category)
-                        like_object.save()
-                    dislike_object = UserDislikeList.objects.filter(user=user, object=choice)
-                    if dislike_object.count() != 0:
-                        dislike_object.delete()
+                top_object = UserTopList.create(object=choice, user=user, category=list_category).save()
+
+                if UserLikeList.objects.filter(user=user, object=choice).count() == 0:
+                    like_object = UserLikeList.create(object=choice, user=user, category=list_category).save()
+
+                dislike_object = UserDislikeList.objects.filter(user=user, object=choice).delete()
 
             recommender(request, category)
             return render(request, 'lists/edit_success.html', {'category': list_category})
     else:
-        user_list = UserChoiceList.objects.filter(user=user, category=list_category)
-        if user_list.count() > 0:
-            prev_list = user_list.first()
-            choices_form = ChoicesForm(initial={'choice_1': prev_list.choice_1, 'choice_2': prev_list.choice_2,
-                        'choice_3': prev_list.choice_3, 'choice_4': prev_list.choice_4, 'choice_5': prev_list.choice_5})
-        else:
-            choices_form = ChoicesForm()
+        prev_top_list = UserTopList.objects.filter(user=user, category=list_category)
+        it = 0
+        choices = []
+        for choice in prev_top_list:
+            choices.append(choice.object)
+            it+=1
+        while it < 5:
+            choices.append(None)
+            it+=1
+        choice_1 = choices[0]
+        choice_2 = choices[1]
+        choice_3 = choices[2]
+        choice_4 = choices[3]
+        choice_5 = choices[4]
+        choices_form = ChoicesForm(initial={'choice_1': choice_1, 'choice_2': choice_2, 'choice_3': choice_3, 'choice_4': choice_4, 'choice_5': choice_5})
 
     url_reverse = reverse('edit', args=[list_category.pk])
 
@@ -100,58 +96,43 @@ def edit(request, category):
 
 @login_required
 def user_list(request, category):
-    '''
-    if request.user.email=="":
-        return redirect('email')
-    '''
-    user_choices = UserChoiceList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
-    user_recommendations = RecommendationList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
 
+    user_choices = UserTopList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
+    user_recommendations = RecommendationList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
     user_dislikes = UserDislikeList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
 
+    choices = []
+    for choice in user_choices:
+        choices.append(choice.object)
+    user_likes = UserLikeList.objects.filter(user=request.user.profile, category__nav_url_slug=category).exclude(object__in=choices)
+
+    list_category = Category.objects.get(nav_url_slug=category)
+    '''
     if user_choices.count() > 0:
         unanswered_categories = []
-        user_likes = UserLikeList.objects.filter(user=request.user.profile, category__nav_url_slug=category).exclude(object__in=get_user_choices(user_choices.first()))   #exclude doesnt work with lists that have None objects
     else:
-        unanswered_categories = Category.objects.filter(nav_url_slug=category)
-        user_likes = UserLikeList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
-
+        unanswered_categories = Category.objects.exclude(pk=list_category.pk)
+    '''
+    unanswered_categories = []
     all_categories = Category.objects.order_by('name')
 
-    return render(request, 'lists/user_list.html', {'user_likes': user_likes, 'user_dislikes': user_dislikes, 'user_recommendations': user_recommendations, 'user_choices': user_choices, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories, 'active_nav':category})
+    return render(request, 'lists/user_list.html', {'user_likes': user_likes, 'user_dislikes': user_dislikes, 'user_recommendations': user_recommendations, 'user_choices': user_choices, 'all_categories': all_categories, 'unanswered_categories': unanswered_categories, 'list_category': list_category, 'active_nav':category})
 
 @login_required
 def all_categories(request):
-    '''
-    if request.user.email=="":
-        return redirect('email')
-    '''
-    user_choices = UserChoiceList.objects.filter(user=request.user.profile)
 
-    answered_categories = []
-    for list in user_choices:
-        answered_categories.append(list.category)
+    user_choices = UserTopList.objects.filter(user=request.user.profile)
+
+    answered_categories = set()
+    for choice in user_choices:
+        if choice.category not in answered_categories:
+            answered_categories.add(choice.category)
 
     unanswered_categories = Category.objects.exclude(name__in = answered_categories)
 
     all_categories = Category.objects.order_by('name')
 
-    return render(request, 'lists/all_categories.html', {'user_choices': user_choices, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories, 'active_nav':'all'})
-
-def get_user_choices(user_list):
-    user_choices = []
-    if user_list.choice_1 != None:
-        user_choices.append(user_list.choice_1)
-    if user_list.choice_2 != None:
-        user_choices.append(user_list.choice_2)
-    if user_list.choice_3 != None:
-        user_choices.append(user_list.choice_3)
-    if user_list.choice_4 != None:
-        user_choices.append(user_list.choice_4)
-    if user_list.choice_5 != None:
-        user_choices.append(user_list.choice_5)
-
-    return user_choices
+    return render(request, 'lists/all_categories.html', {'answered_categories': answered_categories, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories, 'active_nav':'all'})
 
 @login_required
 def email(request):

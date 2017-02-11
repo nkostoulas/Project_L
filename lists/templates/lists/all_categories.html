@@ -41,9 +41,9 @@
     <div class="row">
       <div class="col-md-12">
         <h1>Hello, <b> {{ request.user.first_name }}</b>.</h1>
-        {% if user_choices.count < 1 %}
+        {% if not answered_categories %}
           <h3>Get started by filling in some of the categories below:</h3>
-        {% elif unanswered_categories.count > 1 %}
+        {% elif unanswered_categories %}
           <h3>Fancy discovering more things you like? Fill in another category from below:</h3>
         {% else %}
           <h3>Well done you, you've filled in all our categories! Keep checking back for more categories in the future, and for new recommendations.</h3>
@@ -63,18 +63,18 @@
       <!-- User Choices -->
       <div class="col-5">
         <h4>Answered categories:</h4>
-          {% if user_choices.count < 1 %}
+          {% if not answered_categories %}
           <div class="alert alert-warning" role="alert">
             <strong>Nada!</strong> Fill in some categories below!
           </div>
           {% endif %}
         <!-- Generic category titles -->
-        {% for list in user_choices %}
-        <div class="card" style="cursor: pointer;" onclick="window.location='/categories/{{list.category.nav_url_slug}}';">
-          <img class="card-img-top img-fluid" src="{% static list.category.image.url %}" alt="Card image cap">
+        {% for category in answered_categories %}
+        <div class="card" style="cursor: pointer;" onclick="window.location='/categories/{{category.nav_url_slug}}';">
+          <img class="card-img-top img-fluid" src="{% static category.image.url %}" alt="Card image cap">
           <div class="card-block">
-            <h4 class="card-title" >{{ list.category.name }}</h4>
-            <p class="card-text">{{ list.category.description }}</p>
+            <h4 class="card-title" >{{ category.name }}</h4>
+            <p class="card-text">{{ category.description }}</p>
           </div>
         </div>
         <div style="height: 20px"></div>
