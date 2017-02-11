@@ -100,10 +100,10 @@ def edit(request, category):
 
 @login_required
 def user_list(request, category):
-
+    '''
     if request.user.email=="":
         return redirect('email')
-
+    '''
     user_choices = UserChoiceList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
     user_recommendations = RecommendationList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
 
@@ -122,10 +122,10 @@ def user_list(request, category):
 
 @login_required
 def all_categories(request):
-
+    '''
     if request.user.email=="":
         return redirect('email')
-
+    '''
     user_choices = UserChoiceList.objects.filter(user=request.user.profile)
 
     answered_categories = []

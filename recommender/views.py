@@ -4,7 +4,39 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from lists.models import UserChoiceList, UserProfile, Object, Category
-from .models import RecommendationList, UserLikeList, UserDislikeList
+from .models import RecommendationList, UserLikeList, UserDislikeList, UserDiscardList
+
+@login_required
+def remove_from_like(request, object):
+	like = Object.objects.get(pk=object)
+	like_object = UserLikeList.objects.get(object=like, user=request.user.profile).delete()
+	recommender(request, like.category.pk)
+	return redirect(reverse('user_list', args=[like.category.nav_url_slug]))
+
+@login_required
+def remove_from_dislike(request, object):
+	dislike = Object.objects.get(pk=object)
+	dislike_object = UserDislikeList.objects.get(object=dislike, user=request.user.profile).delete()
+	recommender(request, dislike.category.pk)
+	return redirect(reverse('user_list', args=[dislike.category.nav_url_slug]))
+
+@login_required
+def add_discard(request, object):
+	user = request.user.profile
+	discard = Object.objects.get(pk=object)
+	discard_object = UserDiscardList.create(object=discard, user=user, category=discard.category)
+	discard_object.save()
+
+	like = UserLikeList.objects.filter(object=discard, user=user)
+	if like.count() != 0:
+		like.delete()
+
+	dislike = UserDislikeList.objects.filter(object=discard, user=user)
+	if dislike.count() != 0:
+		dislike.delete()
+
+	recommender(request, discard.category.pk)
+	return redirect(reverse('user_list', args=[discard.category.nav_url_slug]))
 
 @login_required
 def add_like(request, object):
@@ -15,6 +47,10 @@ def add_like(request, object):
 	if like_list.count() == 0:
 		like_object = UserLikeList.create(object=like, user=user, category=like.category)
 		like_object.save()
+
+	dislike = UserDislikeList.objects.filter(object=like, user=user)
+	if dislike.count() != 0:
+		dislike.delete()
 
 	recommender(request, like.category.pk)
 	return redirect(reverse('user_list', args=[like.category.nav_url_slug]))
@@ -29,9 +65,19 @@ def add_dislike(request, object):
 		dislike_object = UserDislikeList.create(object=dislike, user=user, category=dislike.category)
 		dislike_object.save()
 
+	like = UserLikeList.objects.filter(object=dislike, user=user)
+	if like.count() != 0:
+		like.delete()
+
 	recommender(request, dislike.category.pk)
 	return redirect(reverse('user_list', args=[dislike.category.nav_url_slug]))
 
+@login_required
+def refresh_recommender(request, category):
+	category = Category.objects.get(pk=category)
+	discard_list = UserDiscardList.objects.filter(user=request.user.profile, category=category).delete()
+	recommender(request, category.pk)
+	return redirect(reverse('user_list', args=[category.nav_url_slug]))
 
 @login_required
 def recommender(request, category):
@@ -40,6 +86,7 @@ def recommender(request, category):
 	user_list = get_user_choices(UserChoiceList.objects.get(user = user.profile, category=category))
 	user_like_list = get_user_list(UserLikeList.objects.filter(user=user.profile, category=category))
 	user_dislike_list = get_user_list(UserDislikeList.objects.filter(user=user.profile, category=category))
+	user_discard_list = get_user_list(UserDiscardList.objects.filter(user=user.profile, category=category))
 	other_user_lists = UserChoiceList.objects.filter(category=category).exclude(user = user.profile)
 	similarity_list = {}
 
@@ -53,7 +100,7 @@ def recommender(request, category):
 	similarity_list_sorted = sorted(similarity_list.items(), key=lambda x: x[1], reverse=True)
 
 	# Recommendations based on similarity scores
-	recommendations = choose_recommendations(user_list, user_like_list, user_dislike_list, other_user_lists, similarity_list_sorted)
+	recommendations = choose_recommendations(user_list, user_like_list, user_dislike_list, user_discard_list, other_user_lists, similarity_list_sorted)
 
 	try:
 		rec_1 = Object.objects.get(name=recommendations[0])
@@ -96,7 +143,7 @@ def calculate_similarity(user_list, other_list):
 
 	return similarity
 
-def choose_recommendations(user_list, user_like_list, user_dislike_list, other_user_lists, similarity_list):
+def choose_recommendations(user_list, user_like_list, user_dislike_list, user_discard_list, other_user_lists, similarity_list):
 	no_recommendations = 5
 	recommendations = []
 
@@ -113,7 +160,7 @@ def choose_recommendations(user_list, user_like_list, user_dislike_list, other_u
 		other_list = get_user_choices(other_user_lists.get(user=UserProfile.objects.get(user=User.objects.get(username=other_user))))
 
 		for choice in other_list:
-			if choice not in user_list and choice not in user_like_list and choice not in recommendations and choice not in user_dislike_list and choice != "":
+			if choice not in user_list and choice not in user_like_list and choice not in recommendations and choice not in user_dislike_list and choice not in user_discard_list and choice != "":
 				recommendations.append(choice)
 				no_recommendations -= 1
 			if no_recommendations == 0:

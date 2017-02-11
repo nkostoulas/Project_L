@@ -152,7 +152,7 @@
             })
           </script>
 
-        {% endfor %}
+
 
         <!-- Unanswered categories -->
         {% for category in unanswered_categories %}
@@ -209,7 +209,7 @@
                   <a href="{{ like.object.url }}" {% if like.object.url  %}target="_blank"{% endif %}>{{ like.object.name }}</a>
                   <span class="hide-button">
                     <a href="/add_dislike/{{ like.object.pk }}"><i class="fa fa-thumbs-down" aria-hidden="true" style="padding-left:10px"></i></a>
-                    <a href="#"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
+                    <a href="/add_discard/{{ like.object.pk }}"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
                   </span>
                 </li>
               {% endfor %}
@@ -227,7 +227,7 @@
                   <a href="{{ dislike.object.url }}" {% if dislike.object.url  %}target="_blank"{% endif %}>{{ dislike.object.name }}</a>
                   <span class="hide-button">
                     <a href="/add_like/{{ dislike.object.pk }}"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>
-                    <a href="#"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
+                    <a href="/add_discard/{{ dislike.object.pk }}"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
                   </span>
                 </li>
               {% endfor %}
@@ -252,7 +252,7 @@
               <span class="hide-button">
                 <a href="/add_like/{{ recommendation.recommendation_1.pk }}"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>
                 <a href="/add_dislike/{{ recommendation.recommendation_1.pk }}"><i class="fa fa-thumbs-down" aria-hidden="true" style="padding-left:10px"></i></a>
-                <a href="#"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
+                <a href="/add_discard/{{ recommendation.recommendation_1.pk }}"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
               </span>
               <img class="img-fluid" src="{% static recommendation.recommendation_1.image.url %}" style="padding-top:10px" href="{{ recommendation.recommendation_1.url }}" {% if recommendation.recommendation_1.url  %}target="_blank"{% endif %}>
             </li>
@@ -264,7 +264,7 @@
               <span class="hide-button">
                 <a href="/add_like/{{ recommendation.recommendation_2.pk }}"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>
                 <a href="/add_dislike/{{ recommendation.recommendation_2.pk }}"><i class="fa fa-thumbs-down" aria-hidden="true" style="padding-left:10px"></i></a>
-                <a href="#"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
+                <a href="/add_discard/{{ recommendation.recommendation_2.pk }}"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
               </span>
               <img class="img-fluid" src="{% static recommendation.recommendation_2.image.url %}" style="padding-top:10px">
             {% endif %}
@@ -275,7 +275,7 @@
               <span class="hide-button">
                 <a href="/add_like/{{ recommendation.recommendation_3.pk }}"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>
                 <a href="/add_dislike/{{ recommendation.recommendation_3.pk }}"><i class="fa fa-thumbs-down" aria-hidden="true" style="padding-left:10px"></i></a>
-                <a href="#"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
+                <a href="/add_discard/{{ recommendation.recommendation_3.pk }}"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
               </span>
               <img class="img-fluid" src="{% static recommendation.recommendation_3.image.url %}" style="padding-top:10px">
             {% endif %}
@@ -286,7 +286,7 @@
               <span class="hide-button">
                 <a href="/add_like/{{ recommendation.recommendation_4.pk }}"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>
                 <a href="/add_dislike/{{ recommendation.recommendation_4.pk }}"><i class="fa fa-thumbs-down" aria-hidden="true" style="padding-left:10px"></i></a>
-                <a href="#"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
+                <a href="/add_discard/{{ recommendation.recommendation_4.pk }}"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
               </span>
               <img class="img-fluid" src="{% static recommendation.recommendation_4.image.url %}" style="padding-top:10px">
             {% endif %}
@@ -297,11 +297,16 @@
               <span class="hide-button">
                 <a href="/add_like/{{ recommendation.recommendation_5.pk }}"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>
                 <a href="/add_dislike/{{ recommendation.recommendation_5.pk }}"><i class="fa fa-thumbs-down" aria-hidden="true" style="padding-left:10px"></i></a>
-                <a href="#"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
+                <a href="/add_discard/{{ recommendation.recommendation_5.pk }}"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
               </span>
               <img class="img-fluid" src="{% static recommendation.recommendation_5.image.url %}" style="padding-top:10px">
             {% endif %}
           </ul>
+
+          <a class="btn btn-primary btn-block" href="/refresh_recommender/{{ list.category.pk }}">
+            Refresh Recommendations
+          </a>
+
         {% endfor %}
       {% else %}
         <div class="alert alert-warning" role="alert">
@@ -309,6 +314,7 @@
         </div>
       {% endif %}
       </div>
+      {% endfor %}
     </div>
   </div>
 
