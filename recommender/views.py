@@ -171,6 +171,6 @@ def get_other_user_list(users, user_objects):
 		user_lists[user] = []
 
 	for object in user_objects:
-		user_lists[object.user].append(object)
+		user_lists[object.user].append(object.object.name)
 
 	return user_lists

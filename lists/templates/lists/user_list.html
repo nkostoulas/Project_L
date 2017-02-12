@@ -193,6 +193,11 @@
       {% if user_recommendations.count > 0 %}
         {% for recommendation in user_recommendations %}
           <h4>Recommendations for {{ recommendation.category.name }}:</h4>
+          
+          <a class="btn btn-primary btn-block" href="/refresh_recommender/{{ list_category.pk }}">
+            Refresh Recommendations
+          </a>
+
           <ul class="list-group list-group-flush">
 
             {% if recommendation.recommendation_1.name %}
@@ -251,10 +256,6 @@
               <img class="img-fluid" src="{% static recommendation.recommendation_5.image.url %}" style="padding-top:10px">
             {% endif %}
           </ul>
-
-          <a class="btn btn-primary btn-block" href="/refresh_recommender/{{ list_category.pk }}">
-            Refresh Recommendations
-          </a>
 
         {% endfor %}
       {% else %}
