@@ -93,35 +93,13 @@ def recommender(request, category):
 	# Recommendations based on similarity scores
 	recommendations = choose_recommendations(user_top_list, user_like_list, user_dislike_list, user_discard_list, other_top_list, similarity_list_sorted)
 
-	try:
-		rec_1 = Object.objects.get(name=recommendations[0])
-	except:
-		rec_1 = None
-	try:
-		rec_2 = Object.objects.get(name=recommendations[1])
-	except:
-		rec_2 = None
-	try:
-		rec_3 = Object.objects.get(name=recommendations[2])
-	except:
-		rec_3 = None
-	try:
-		rec_4 = Object.objects.get(name=recommendations[3])
-	except:
-		rec_4 = None
-	try:
-		rec_5 = Object.objects.get(name=recommendations[4])
-	except:
-		rec_5 = None
+	# Delete previous recommendations
+	prev_recommendations = RecommendationList.objects.filter(user=user.profile, category=category).delete()
 
-	user_recommendations = RecommendationList.objects.filter(user=user.profile, category=category)
+	# Add new recommendations
 	category_object = Category.objects.get(pk=category)
-
-	if user_recommendations.count() > 0:
-		user_recommendations.update(recommendation_1=rec_1, recommendation_2=rec_2, recommendation_3=rec_3, recommendation_4=rec_4, recommendation_5=rec_5)
-	else:
-		recommendation_object = RecommendationList.create(recommendation_1=rec_1, recommendation_2=rec_2, recommendation_3=rec_3, recommendation_4=rec_4, recommendation_5=rec_5, user=user.profile, category=category_object)
-		recommendation_object.save()
+	for recommendation in recommendations:
+		recommendation_object = RecommendationList.create(object=Object.objects.get(name=recommendation), user=user.profile, category=category_object).save()
 
 	return None
 

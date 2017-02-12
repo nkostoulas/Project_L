@@ -100,7 +100,6 @@ def user_list(request, category):
     user_choices = UserTopList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
     user_recommendations = RecommendationList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
     user_dislikes = UserDislikeList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
-
     choices = []
     for choice in user_choices:
         choices.append(choice.object)

@@ -190,78 +190,37 @@
 
       <!-- Suggestions -->
       <div class="col-5">
-      {% if user_recommendations.count > 0 %}
-        {% for recommendation in user_recommendations %}
-          <h4>Recommendations for {{ recommendation.category.name }}:</h4>
-          
+      {% if user_recommendations %}
+        <h4>Recommendations for {{ list_category.name }}:</h4>
           <a class="btn btn-primary btn-block" href="/refresh_recommender/{{ list_category.pk }}">
             Refresh Recommendations
           </a>
-
           <ul class="list-group list-group-flush">
-
-            {% if recommendation.recommendation_1.name %}
-            <li class="list-group-item list-group-item-action">
-              <b><a href="{{ recommendation.recommendation_1.url }}" {% if recommendation.recommendation_1.url  %}target="_blank"{% endif %}>1. {{ recommendation.recommendation_1.name }}</a></b>
-              <span class="hide-button">
-                <a href="/add_like/{{ recommendation.recommendation_1.pk }}"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>
-                <a href="/add_dislike/{{ recommendation.recommendation_1.pk }}"><i class="fa fa-thumbs-down" aria-hidden="true" style="padding-left:10px"></i></a>
-                <a href="/add_discard/{{ recommendation.recommendation_1.pk }}"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
-              </span>
-              <img class="img-fluid" src="{% static recommendation.recommendation_1.image.url %}" style="padding-top:10px" href="{{ recommendation.recommendation_1.url }}" {% if recommendation.recommendation_1.url  %}target="_blank"{% endif %}>
-            </li>
-            {% endif %}
-
-            {% if recommendation.recommendation_2.name %}
-            <li class="list-group-item list-group-item-action">
-              <b><a href="{{ recommendation.recommendation_2.url }}" {% if recommendation.recommendation_2.url  %}target="_blank"{% endif %}>2. {{ recommendation.recommendation_2.name }}</a></b>
-              <span class="hide-button">
-                <a href="/add_like/{{ recommendation.recommendation_2.pk }}"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>
-                <a href="/add_dislike/{{ recommendation.recommendation_2.pk }}"><i class="fa fa-thumbs-down" aria-hidden="true" style="padding-left:10px"></i></a>
-                <a href="/add_discard/{{ recommendation.recommendation_2.pk }}"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
-              </span>
-              <img class="img-fluid" src="{% static recommendation.recommendation_2.image.url %}" style="padding-top:10px">
-            {% endif %}
-
-            {% if recommendation.recommendation_3.name %}
-            <li class="list-group-item list-group-item-action">
-              <b><a href="{{ recommendation.recommendation_3.url }}" {% if recommendation.recommendation_3.url  %}target="_blank"{% endif %}>3. {{ recommendation.recommendation_3.name }}</a></b>
-              <span class="hide-button">
-                <a href="/add_like/{{ recommendation.recommendation_3.pk }}"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>
-                <a href="/add_dislike/{{ recommendation.recommendation_3.pk }}"><i class="fa fa-thumbs-down" aria-hidden="true" style="padding-left:10px"></i></a>
-                <a href="/add_discard/{{ recommendation.recommendation_3.pk }}"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
-              </span>
-              <img class="img-fluid" src="{% static recommendation.recommendation_3.image.url %}" style="padding-top:10px">
-            {% endif %}
-
-            {% if recommendation.recommendation_4.name %}
-            <li class="list-group-item list-group-item-action">
-              <b><a href="{{ recommendation.recommendation_4.url }}" {% if recommendation.recommendation_4.url  %}target="_blank"{% endif %}>4. {{ recommendation.recommendation_4.name }}</a></b>
-              <span class="hide-button">
-                <a href="/add_like/{{ recommendation.recommendation_4.pk }}"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>
-                <a href="/add_dislike/{{ recommendation.recommendation_4.pk }}"><i class="fa fa-thumbs-down" aria-hidden="true" style="padding-left:10px"></i></a>
-                <a href="/add_discard/{{ recommendation.recommendation_4.pk }}"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
-              </span>
-              <img class="img-fluid" src="{% static recommendation.recommendation_4.image.url %}" style="padding-top:10px">
-            {% endif %}
-
-            {% if recommendation.recommendation_5.name %}
-            <li class="list-group-item list-group-item-action">
-              <b><a href="{{ recommendation.recommendation_5.url }}" {% if recommendation.recommendation_5.url  %}target="_blank"{% endif %}>5. {{ recommendation.recommendation_5.name }}</a></b>
-              <span class="hide-button">
-                <a href="/add_like/{{ recommendation.recommendation_5.pk }}"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>
-                <a href="/add_dislike/{{ recommendation.recommendation_5.pk }}"><i class="fa fa-thumbs-down" aria-hidden="true" style="padding-left:10px"></i></a>
-                <a href="/add_discard/{{ recommendation.recommendation_5.pk }}"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
-              </span>
-              <img class="img-fluid" src="{% static recommendation.recommendation_5.image.url %}" style="padding-top:10px">
-            {% endif %}
+          {% for recommendation in user_recommendations %}
+              <li class="list-group-item list-group-item-action">
+                <b><a href="{{ recommendation.object.url }}" {% if recommendation.object.url  %}target="_blank"{% endif %}>{{ forloop.counter }}. {{ recommendation.object.name }}</a></b>
+                <span class="hide-button">
+                  <a href="/add_like/{{ recommendation.object.pk }}"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>
+                  <a href="/add_dislike/{{ recommendation.object.pk }}"><i class="fa fa-thumbs-down" aria-hidden="true" style="padding-left:10px"></i></a>
+                  <a href="/add_discard/{{ recommendation.object.pk }}"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
+                </span>
+                <img class="img-fluid" src="{% static recommendation.object.image.url %}" style="padding-top:10px" href="{{ recommendation.object.url }}" {% if recommendation.object.url  %}target="_blank"{% endif %}>
+              </li>
+          {% endfor %}
           </ul>
-
-        {% endfor %}
       {% else %}
-        <div class="alert alert-warning" role="alert">
-          <strong>We need to know you better first!</strong> Tell us what you like and we'll give you some recommendations.
-        </div>
+        {% if not user_choices %}
+          <div class="alert alert-warning" role="alert">
+            <strong>We need to know you better first!</strong> Tell us what you like and we'll give you some recommendations.
+          </div>
+        {% else %}
+          <div class="alert alert-warning" role="alert">
+            <strong>We have run out of recommendations!</strong> Refresh if you are willing to revisit older recommendations.
+          </div>
+          <a class="btn btn-primary btn-block" href="/refresh_recommender/{{ list_category.pk }}">
+            Refresh Recommendations
+          </a>
+        {% endif %}
       {% endif %}
       </div>
     </div>
