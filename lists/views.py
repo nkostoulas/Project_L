@@ -20,7 +20,7 @@ class edit_autocomplete(autocomplete.Select2QuerySetView):
         category = Category.objects.get(pk=self.request.session['category'])
 
         #something happens with id = 0
-        qs = Object.objects.all().exclude(pk=0).filter(category=category)
+        qs = Object.objects.all().exclude(pk=0).filter(category=category).order_by('name')
 
         if self.q:
             qs = qs.filter(name__icontains=self.q, category=category)
