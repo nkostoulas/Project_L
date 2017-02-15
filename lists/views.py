@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from dal import autocomplete
 from .models import UserTopList, Category, Object
-from .forms import EmailForm, ChoicesForm
+from .forms import ChoicesForm
 from recommender.views import recommender
 from recommender.models import RecommendationList, UserLikeList, UserDislikeList
 
@@ -20,7 +20,7 @@ class edit_autocomplete(autocomplete.Select2QuerySetView):
         category = Category.objects.get(pk=self.request.session['category'])
 
         #something happens with id = 0
-        qs = Object.objects.all().exclude(pk=0).filter(category=category)
+        qs = Object.objects.all().exclude(pk=0).filter(category=category).order_by('name')
 
         if self.q:
             qs = qs.filter(name__icontains=self.q, category=category)
@@ -133,6 +133,8 @@ def all_categories(request):
 
     return render(request, 'lists/all_categories.html', {'answered_categories': answered_categories, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories, 'active_nav':'all'})
 
+# MIGHT USE IN THE FUTURE
+'''
 @login_required
 def email(request):
     if request.method == 'POST':
@@ -146,8 +148,6 @@ def email(request):
         form = EmailForm()
     return render(request, 'projectl/email.html', {'form': form})
 
-# MIGHT USE IN THE FUTURE
-'''
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)

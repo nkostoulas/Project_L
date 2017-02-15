@@ -1,4 +1,5 @@
-import datetime
+import datetime, json
+from urllib.request import Request, urlopen
 from .models import UserProfile
 
     # User details pipeline
@@ -18,3 +19,21 @@ def user_details(backend, details, response, user=None, *args, **kwargs):
             UserProfile.objects.create(
                 **attrs
             )
+
+def user_email(strategy, *args, **kwargs):
+    if not kwargs['is_new']:
+        return
+
+    user = kwargs['user']
+    fbuid = kwargs['response']['id']
+    access_token = kwargs['response']['access_token']
+    url = u'https://graph.facebook.com/{0}/' \
+          u'?fields=email' \
+          u'&access_token={1}'.format(
+        fbuid,
+        access_token,
+    )
+    request = Request(url)
+    email = json.loads(urlopen(request).read()).get('email')
+    user.email = email
+    user.save()
