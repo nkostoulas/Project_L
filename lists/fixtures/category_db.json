@@ -3,40 +3,40 @@
    "model": "lists.Category",
    "pk": 1,
    "fields": {
-      "name": "Restaurants",
+      "name": "Restaurants in London",
       "description": "Do you live to eat or eat to live?",
-      "image": "category_backgrounds/restaurants.jpg",
-      "nav_url_slug": "restaurants"
+      "image": "category_backgrounds/restaurants in london.jpg",
+      "nav_url_slug": "restaurantsinlondon"
    }
 },
  {
    "model": "lists.Category",
    "pk": 2,
    "fields": {
-      "name": "Cafes",
+      "name": "Cafes in London",
       "description": "Find your inner hipster.",
-      "image": "category_backgrounds/cafes.jpg",
-      "nav_url_slug": "cafes"
+      "image": "category_backgrounds/cafes in london.jpg",
+      "nav_url_slug": "cafesinlondon"
    }
 },
  {
    "model": "lists.Category",
    "pk": 3,
    "fields": {
-      "name": "Books",
+      "name": "Books (English)",
       "description": "So many books, so little time.",
-      "image": "category_backgrounds/books.jpg",
-      "nav_url_slug": "books"
+      "image": "category_backgrounds/books (english).jpg",
+      "nav_url_slug": "books(english)"
    }
 },
  {
    "model": "lists.Category",
    "pk": 4,
    "fields": {
-      "name": "Video games",
+      "name": "Computer games",
       "description": "Video games ruined my life. Good thing I have two more.",
-      "image": "category_backgrounds/video games.jpg",
-      "nav_url_slug": "videogames"
+      "image": "category_backgrounds/computer games.jpg",
+      "nav_url_slug": "computergames"
    }
 }
 ]
