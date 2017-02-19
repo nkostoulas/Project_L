@@ -10,6 +10,7 @@ def user_details(backend, details, response, user=None, *args, **kwargs):
             attrs = {'user': user}
             if backend.name == 'facebook':
                 fb_data = {
+                    'fbid': response.get('id'),
                     'gender': response.get('gender'),
                     'locale': response.get('locale'),
                     'age_range': response.get('age_range'),

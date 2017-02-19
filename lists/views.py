@@ -1,8 +1,10 @@
+import json
+from urllib.request import Request, urlopen
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from dal import autocomplete
-from .models import UserTopList, Category, Object
+from .models import UserTopList, Category, Object, UserProfile
 from .forms import ChoicesForm
 from recommender.views import recommender
 from recommender.models import RecommendationList, UserLikeList, UserDislikeList
@@ -10,7 +12,6 @@ from recommender.models import RecommendationList, UserLikeList, UserDislikeList
 # Create your views here.
 def home(request):
     return render(request, 'projectl/home.html')
-
 
 class edit_autocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -95,10 +96,28 @@ def edit(request, category):
     return render(request, 'lists/edit.html', {'form': choices_form, 'category': list_category, 'url_reverse': url_reverse})
 
 @login_required
+def get_user_friends(request):
+	friends = []
+	if request.user.is_authenticated():
+		social_user = request.user.social_auth.filter(
+    		provider='facebook',
+			).first()
+		if social_user:
+				url = u'https://graph.facebook.com/{0}/' \
+      			u'friends?fields=id,name' \
+      			u'&access_token={1}'.format(
+          			social_user.uid,
+          			social_user.extra_data['access_token'],
+      			)
+				request = Request(url)
+				friends = json.loads(urlopen(request).read()).get('data')
+	return [friend['id'] for friend in friends]
+
+@login_required
 def user_list(request, category):
 
     user_choices = UserTopList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
-    user_recommendations = RecommendationList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
+    recommendations = RecommendationList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
     user_dislikes = UserDislikeList.objects.filter(user=request.user.profile, category__nav_url_slug=category)
     choices = []
     for choice in user_choices:
@@ -106,12 +125,13 @@ def user_list(request, category):
     user_likes = UserLikeList.objects.filter(user=request.user.profile, category__nav_url_slug=category).exclude(object__in=choices)
 
     list_category = Category.objects.get(nav_url_slug=category)
-    '''
-    if user_choices.count() > 0:
-        unanswered_categories = []
-    else:
-        unanswered_categories = Category.objects.exclude(pk=list_category.pk)
-    '''
+
+    friends_profile = UserProfile.objects.filter(fbid__in = get_user_friends(request))
+
+    user_recommendations = {}
+    for rec in recommendations:
+        user_recommendations[rec.object] = UserTopList.objects.filter(object=rec.object).filter(user__in = friends_profile).exclude(user=request.user.profile).first()
+
     unanswered_categories = []
     all_categories = Category.objects.order_by('name')
 

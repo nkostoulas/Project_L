@@ -126,7 +126,7 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_FACEBOOK_KEY = '1336696159727551'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '154cfb08bd913afa02fd5927875c711d'  # App Secret
 FACEBOOK_EXTENDED_PERMISSIONS = ['email']
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email'] ##for user_location and dob Facebook has to review how app is used
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends'] ##for user_location and dob Facebook has to review how app is used
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,first_name,last_name,link,email,gender,age_range,locale',
 }

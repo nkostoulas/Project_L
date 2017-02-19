@@ -205,24 +205,25 @@
             Refresh Recommendations
           </a>
           <ul class="list-group list-group-flush">
-          {% for recommendation in user_recommendations %}
+          {% for recommendation,friend in user_recommendations.items %}
               <li class="list-group-item list-group-item-action">
                 <b>
-                  {% if recommendation.object.url  %}
-                    <a href="{{ recommendation.object.url }}" target="_blank">{{ forloop.counter }}. {{ recommendation.object.name }}</a>
+                  {% if recommendation.url  %}
+                    <a href="{{ recommendation.url }}" target="_blank">{{ forloop.counter }}. {{ recommendation.name }}</a>
                   {% else %}
-                    {{ forloop.counter }}. {{ recommendation.object.name }}
+                    {{ forloop.counter }}. {{ recommendation.name }}
                   {% endif %}
+                  {% if friend %} ({{ friend.user.user.username }} likes this!) {% endif %}
                 </b>
                 <span class="hide-button">
-                  <a href="/add_like/{{ recommendation.object.pk }}/#mainbody"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>
-                  <a href="/add_dislike/{{ recommendation.object.pk }}/#mainbody"><i class="fa fa-thumbs-down" aria-hidden="true" style="padding-left:10px"></i></a>
-                  <a href="/add_discard/{{ recommendation.object.pk }}/#mainbody"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
+                  <a href="/add_like/{{ recommendation.pk }}/#mainbody"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>
+                  <a href="/add_dislike/{{ recommendation.pk }}/#mainbody"><i class="fa fa-thumbs-down" aria-hidden="true" style="padding-left:10px"></i></a>
+                  <a href="/add_discard/{{ recommendation.pk }}/#mainbody"><i class="fa fa-times" aria-hidden="true" style="padding-left:10px"></i></a>
                 </span>
-                {% if recommendation.object.image %}
-                  <img class="img-fluid" src="{% static recommendation.object.image.url %}" style="padding-top:10px" href="{{ recommendation.object.url }}" {% if recommendation.object.url  %}target="_blank"{% endif %}>
+                {% if recommendation.image %}
+                  <img class="img-fluid" src="{% static recommendation.image.url %}" style="padding-top:10px" href="{{ recommendation.url }}" {% if recommendation.url  %}target="_blank"{% endif %}>
                 {% endif %}
-                <div style="padding-top:10px">{{ recommendation.object.description|readmore:15 }}</div>
+                <div style="padding-top:10px">{{ recommendation.description|readmore:15 }}</div>
               </li>
           {% endfor %}
           </ul>
