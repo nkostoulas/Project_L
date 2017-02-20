@@ -110,7 +110,7 @@ def get_user_friends(request):
           			social_user.extra_data['access_token'],
       			)
 				request = Request(url)
-				friends = json.loads(urlopen(request).read()).get('data')
+				friends = json.loads(urlopen(request).read().decode('utf-8')).get('data')
 	return [friend['id'] for friend in friends]
 
 @login_required

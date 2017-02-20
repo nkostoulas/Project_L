@@ -35,6 +35,6 @@ def user_email(strategy, *args, **kwargs):
         access_token,
     )
     request = Request(url)
-    email = json.loads(urlopen(request).read()).get('email')
+    email = json.loads(urlopen(request).read().decode('utf-8')).get('email')
     user.email = email
     user.save()
