@@ -14,6 +14,8 @@ def user_details(backend, details, response, user=None, *args, **kwargs):
                     'gender': response.get('gender'),
                     'locale': response.get('locale'),
                     'age_range': response.get('age_range'),
+                    'first_name': response.get('first_name'),
+                    'last_name': response.get('last_name')
                 }
                 attrs.update(fb_data.items())
 

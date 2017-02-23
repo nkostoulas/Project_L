@@ -156,14 +156,30 @@ def all_categories(request):
 @login_required
 def profile(request, user_id):
 
-    top_choices = UserTopList.objects.filter(user=request.user.profile)
+    isMyProfile = False
 
-    answered_categories = set()
-    for choice in top_choices:
-        if choice.category not in answered_categories:
-            answered_categories.add(choice.category)
+    if UserProfile.objects.filter(fbid__in = get_user_friends(request)).filter(pk=user_id).count() == 0:
+        # user_id is either User or Stranger
+        if user_id == str(request.user.id):
+            # user_id is for User
+            isMyProfile = True
 
-    return render(request, 'lists/user_profile.html', {'answered_categories': answered_categories, 'top_choices': top_choices})
+        else:
+            # user_id is stranger's
+            return redirect('all_categories')
+
+    user = UserProfile.objects.get(user=user_id)
+    top_choices = UserTopList.objects.filter(user=user_id)
+    answered_categories = Category.objects.filter(usertoplist__in=top_choices).distinct()
+
+    categories_and_choices = {}
+    for category in answered_categories:
+        categories_and_choices[category] = top_choices.filter(category=category)
+
+    if isMyProfile:
+        return render(request, 'lists/user_profile.html', {'categories_and_choices': categories_and_choices, 'user': user})
+    else:
+        return render(request, 'lists/user_profile.html', {'categories_and_choices': categories_and_choices, 'user': user})
 
 # MIGHT USE IN THE FUTURE
 '''

@@ -180,7 +180,7 @@
                   {% else %}
                     {{ forloop.counter }}. {{ recommendation.name }}
                   {% endif %}
-                  {% if friend %} ({{ friend.user.user.username }} likes this!) {% endif %}
+                  {% if friend %} (<a href="/users/{{friend.user.pk}}">{{ friend.user.first_name }} {{ friend.user.last_name }}</a> likes this!) {% endif %}
                 </b>
                 <span class="hide-button">
                   <a href="/add_like/{{ recommendation.pk }}/#mainbody"><i class="fa fa-thumbs-up" aria-hidden="true" style="padding-left:20px"></i></a>

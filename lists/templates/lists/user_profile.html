@@ -7,15 +7,15 @@
 <div class="container">
   <div class="row" id="mainbody">
     <div class="col-md-12">
-      <h1><b>{{request.user.first_name}}'s</b> favourite things</h1>
+      <h1><b>{{user.first_name}}'s</b> favourite things</h1>
     </div>
   </div>
 
   <div style="height:50px"></div>
 
   <div class="row">
+    {% for category,choices in categories_and_choices.items %}
     <div class="col-md-3">
-      {% for category in answered_categories %}
       <div class="card" style="cursor: pointer;" onclick="window.location='/categories/{{category.nav_url_slug}}';">
         <img class="card-img-top img-fluid" src="{% static category.image.url %}" alt="Card image cap">
         <div class="card-block">
@@ -23,18 +23,16 @@
         </div>
 
         <ul class="list-group list-group-flush">
-          {% for choice in top_choices %}
+          {% for choice in choices %}
             <li class="list-group-item">
-              {% if choice.object.category.name == category.name %}
               <a href="{{ choice.object.url }}" {% if choice.object.url %}target="_blank"{% endif %}>{{ forloop.counter }}. {{ choice.object.name }}</a>
-              {% endif %}
             </li>
           {% endfor %}
         </ul>
       </div>
       <div style="height: 20px"></div>
-      {% endfor %}
     </div>
+    {% endfor %}
   </div>
 
 {% endblock %}

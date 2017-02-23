@@ -25,6 +25,8 @@ class Object(models.Model):
 class UserProfile(models.Model):
 
     user = models.OneToOneField(User, unique=True, on_delete=models.CASCADE, related_name='profile')
+    first_name = models.CharField(max_length=200, unique=True, null=True)
+    last_name = models.CharField(max_length=200, unique=True, null=True)
     fbid = models.BigIntegerField(unique=True)
     gender = models.CharField(max_length=20, blank=True, null=True)
     locale = models.CharField(max_length=10, blank=True, null=True)
