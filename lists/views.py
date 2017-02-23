@@ -153,6 +153,18 @@ def all_categories(request):
 
     return render(request, 'lists/all_categories.html', {'answered_categories': answered_categories, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories, 'active_nav':'all'})
 
+@login_required
+def profile(request, user_id):
+
+    top_choices = UserTopList.objects.filter(user=request.user.profile)
+
+    answered_categories = set()
+    for choice in top_choices:
+        if choice.category not in answered_categories:
+            answered_categories.add(choice.category)
+
+    return render(request, 'lists/user_profile.html', {'answered_categories': answered_categories, 'top_choices': top_choices})
+
 # MIGHT USE IN THE FUTURE
 '''
 @login_required

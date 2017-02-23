@@ -1,42 +1,9 @@
-{% extends 'projectl/base.html' %}
+{% extends 'projectl/authenticated_base.html' %}
 
 {% load staticfiles %}
 {% load readmore %}
 
 {% block content %}
-  <!-- Fixed navbar -->
-  <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="/categories/all">Project L</a>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="nav navbar-nav mr-auto">
-      {% if user.is_authenticated %}
-        <li class="nav-item active">
-          <a class="nav-link" href="/categories/all">{{ user.first_name }}<span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/logout">logout</a>
-        </li>
-      {% else %}
-        <li class="nav-item active">
-          <a class="nav-link" href="/login">Login</a>
-        </li>
-      {% endif %}
-      </ul>
-    </div>
-  </nav>
-
-  <div style="height:50px"></div>
-
-  <div class="jumbotron jumbotron-fluid default-background">
-    <div class="container">
-      <h1 class="display-1">Project L</h1>
-      <div style="height:10px"></div>
-      <h2>Discover more things to like.</h2>
-    </div>
-  </div>
 
   <div class="container">
     <div class="row" id="mainbody">
@@ -244,7 +211,5 @@
       </div>
     </div>
   </div>
-
-  <div style="height:100px"></div>
 
 {% endblock %}

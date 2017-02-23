@@ -15,6 +15,7 @@ urlpatterns = [
 	url(r'^categories/all/$', views.all_categories, name='all_categories'),
 	url(r'^categories/(?P<category>\w+)/$', views.user_list, name='user_list'),
 	url(r'^edit/(?P<category>\d+)/$', views.edit, name='edit'),
+	url(r'^users/(?P<user_id>\d+)/$', views.profile),
 
 	#	from apps
     url(r'^oauth/', include('social_django.urls', namespace='social')),
