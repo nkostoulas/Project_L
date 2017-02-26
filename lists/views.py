@@ -151,7 +151,7 @@ def all_categories(request):
 
     all_categories = Category.objects.order_by('name')
 
-    return render(request, 'lists/all_categories.html', {'answered_categories': answered_categories, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories, 'active_nav':'all'})
+    return render(request, 'lists/all_categories.html', {'current_nav': 'home', 'answered_categories': answered_categories, 'unanswered_categories': unanswered_categories, 'all_categories': all_categories, 'active_nav':'all'})
 
 @login_required
 def profile(request, user_id):
@@ -177,7 +177,7 @@ def profile(request, user_id):
         categories_and_choices[category] = top_choices.filter(category=category)
 
     if isMyProfile:
-        return render(request, 'lists/user_profile.html', {'categories_and_choices': categories_and_choices, 'user': user})
+        return render(request, 'lists/user_profile.html', {'current_nav': 'profile', 'categories_and_choices': categories_and_choices, 'user': user})
     else:
         return render(request, 'lists/user_profile.html', {'categories_and_choices': categories_and_choices, 'user': user})
 

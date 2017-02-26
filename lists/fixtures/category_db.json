@@ -23,10 +23,10 @@
    "model": "lists.Category",
    "pk": 3,
    "fields": {
-      "name": "Books (English)",
+      "name": "English Books",
       "description": "So many books, so little time.",
-      "image": "category_backgrounds/books (english).jpg",
-      "nav_url_slug": "books(english)"
+      "image": "category_backgrounds/english books.jpg",
+      "nav_url_slug": "englishbooks"
    }
 },
  {

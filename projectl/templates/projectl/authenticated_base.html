@@ -24,6 +24,7 @@
 
     <script type="text/javascript" src="{% static 'js/list_display_filter.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/font-awesome.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/chart.bundle.min.js' %}"></script>
 
    <!-- <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script> -->
 
@@ -41,18 +42,27 @@
     <a class="navbar-brand" href="/categories/all">Project L</a>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="nav navbar-nav mr-auto">
-      {% if request.user.is_authenticated %}
-        <li class="nav-item active">
-          <a class="nav-link" href="/users/{{request.user.pk}}">{{ request.user.first_name }}<span class="sr-only">(current)</span></a>
+        <li class="nav-item {% if current_nav == 'analytics' %}active{% endif %}">
+          <a class="nav-link" href="/analytics"><i class="fa fa-area-chart" aria-hidden="true"></i> Analytics</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/logout">logout</a>
-        </li>
-      {% else %}
-        <li class="nav-item active">
-          <a class="nav-link" href="/login">Login</a>
-        </li>
-      {% endif %}
+      </ul>
+
+      <ul class="nav navbar-nav pull-right">
+        {% if request.user.is_authenticated %}
+          <li class="nav-item {% if current_nav == 'profile' %}active{% endif %}">
+            <a class="nav-link" href="/users/{{request.user.pk}}">{{ request.user.first_name }}<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item {% if current_nav == 'home' %}active{% endif %}">
+            <a class="nav-link" href="/categories/all">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        {% else %}
+          <li class="nav-item active">
+            <a class="nav-link" href="/login">Login</a>
+          </li>
+        {% endif %}
       </ul>
     </div>
   </nav>
