@@ -4,7 +4,11 @@
    "pk": 0,
    "fields": {
       "user": 0,
-      "fbid": 12345
+      "fbid": 12345,
+      "first_name": "Bob",
+      "gender": "male",
+      "locale": "zh_CN",
+      "age_range": "17"
    }
 },
  {
@@ -12,7 +16,11 @@
    "pk": 1,
    "fields": {
       "user": 1,
-      "fbid": 67898
+      "fbid": 67898,
+      "first_name": "Jackie",
+      "gender": "female",
+      "locale": "zh_CN",
+      "age_range": "15"
    }
 },
  {
@@ -20,7 +28,11 @@
    "pk": 2,
    "fields": {
       "user": 2,
-      "fbid": 98373
+      "fbid": 98373,
+      "first_name": "Xuan",
+      "gender": "female",
+      "locale": "mk_MK",
+      "age_range": "26"
    }
 },
  {
@@ -28,7 +40,11 @@
    "pk": 3,
    "fields": {
       "user": 3,
-      "fbid": 33821
+      "fbid": 33821,
+      "first_name": "Thanos",
+      "gender": "male",
+      "locale": "el_GR",
+      "age_range": "22"
    }
 },
  {
@@ -36,7 +52,11 @@
    "pk": 4,
    "fields": {
       "user": 4,
-      "fbid": 33321
+      "fbid": 33321,
+      "first_name": "Baby",
+      "gender": "male",
+      "locale": "mk_MK",
+      "age_range": "2"
    }
 }
 ]

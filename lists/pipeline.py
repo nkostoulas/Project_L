@@ -38,5 +38,6 @@ def user_email(strategy, *args, **kwargs):
     )
     request = Request(url)
     email = json.loads(urlopen(request).read().decode('utf-8')).get('email')
-    user.email = email
+    if email:
+        user.email = email
     user.save()

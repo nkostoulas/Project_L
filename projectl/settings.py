@@ -47,6 +47,7 @@ PREREQ_APPS = [
 PROJECT_APPS = [
     'lists',
     'recommender',
+    'analytics',
     'projectl',
 ]
 
