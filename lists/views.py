@@ -15,7 +15,7 @@ def home(request):
 
 class edit_autocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return Object.objects.none()
 
         category = Category.objects.get(pk=self.request.session['category'])
@@ -98,7 +98,7 @@ def edit(request, category):
 @login_required
 def get_user_friends(request):
 	friends = []
-	if request.user.is_authenticated():
+	if request.user.is_authenticated:
 		social_user = request.user.social_auth.filter(
     		provider='facebook',
 			).first()
