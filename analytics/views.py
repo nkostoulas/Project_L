@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from lists.models import UserTopList, UserProfile, Object, Category
 from .forms import AnalyticsForm
 

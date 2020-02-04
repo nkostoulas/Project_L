@@ -9,8 +9,8 @@ urlpatterns = [
 
 	#	lists views
 	url(r'^$', views.home, name='home'),
-    #url(r'^login/$', auth_views.login, {'template_name': 'registration/login.html'}, name='login'),
-	url(r'^logout/$', auth_views.logout, {'template_name': 'projectl/home.html'}, name='logout'),
+    #url(r'^login/$', auth_views.LoginView, {'template_name': 'registration/login.html'}, name='login'),
+	url(r'^logout/$', auth_views.LogoutView, {'template_name': 'projectl/home.html'}, name='logout'),
 	#url(r'^email/$', views.email, name='email'),
 	url(r'^categories/all/$', views.all_categories, name='all_categories'),
 	url(r'^categories/(?P<category>\w+)/$', views.user_list, name='user_list'),

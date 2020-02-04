@@ -2,7 +2,7 @@ import json
 from urllib.request import Request, urlopen
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from dal import autocomplete
 from .models import UserTopList, Category, Object, UserProfile
 from .forms import ChoicesForm

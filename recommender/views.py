@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from lists.models import UserTopList, UserProfile, Object, Category
 from .models import RecommendationList, UserLikeList, UserDislikeList, UserDiscardList
 
